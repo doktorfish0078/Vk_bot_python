@@ -1,5 +1,5 @@
-beautifulsoup4=4.9.1
-pip=20.2.2
-requests=2.24.0
-selenium=3.141.0
-vk-api=11.8.0
+beautifulsoup4==4.9.1
+pip==20.2.2
+requests==2.24.0
+selenium==3.141.0
+vk-api==11.8.0
