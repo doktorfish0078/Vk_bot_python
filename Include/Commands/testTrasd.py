@@ -9,7 +9,8 @@ def get_schedule_bus():
     try:
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        driver = webdriver.Chrome(options=chrome_options)
+        driver = webdriver.PhantomJS()
+        #driver = webdriver.Chrome(options=chrome_options)
         driver.set_window_size(1600, 2070)
         driver.get(URL)
         elem = driver.find_element_by_class_name("table-st1")
