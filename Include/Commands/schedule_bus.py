@@ -10,7 +10,7 @@ def get_path_schedule_bus(text_msg):
     :param text_msg:
     :return: Возвращает путь до сделанного скриншота
     """
-    path_to_chromdriver = "D:\Projects\Python\\bot_for_vk\Include\chromedriver"
+    path_to_chromdriver = ""
     now = datetime.datetime.now()  # текущая дата и время
     URL = "https://igis.ru/gortrans/bus/izh/"  # izh/номер автобуса
     numb_bus = get_numb_bus(text_msg)
@@ -21,14 +21,14 @@ def get_path_schedule_bus(text_msg):
     try:
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        driver = webdriver.Chrome(executable_path=path_to_chromdriver, options=chrome_options)
+        driver = webdriver.Chrome(options=chrome_options)
         driver.set_window_size(1600, 2070)
         driver.get(URL)
         elem = driver.find_element_by_class_name("table-st1")
         elem.screenshot(
-            "D:\Projects\Python\\bot_for_vk\Include\screenshots\screen_" + now.strftime("%d-%m-%Y %H-%M-%S") + ".png")
+            "screenshots\screen_" + now.strftime("%d-%m-%Y %H-%M-%S") + ".png")
         driver.quit()
-        return "D:\Projects\Python\\bot_for_vk\Include\screenshots\screen_{0}.png".format(
+        return "screenshots\screen_{0}.png".format(
             now.strftime("%d-%m-%Y %H-%M-%S"))
     except BaseException():
         print("Ошибка получения скриншота с адреса " + URL)
