@@ -1,5 +1,5 @@
 import random
-from Include.Commands import weather,schedule,skirmish,myanimelist,how_week,schedule_bus
+from Include.Commands import weather,schedule,skirmish,myanimelist,how_week,schedule_bus,list_commands
 
 from vk_api import VkApi, VkUpload
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -74,19 +74,17 @@ def parse_msg(event):
     msg_text = event.message['text'].lower()
     chat_id = event.chat_id
 
+    if "help" in msg_text or "команды" in msg_text:
+        send_msg_tochat(chat_id,list_commands.get_commands())
+
     if 'перестрелка' in msg_text and '|' in msg_text:
         send_msg_tochat(chat_id, skirmish.skirmish(event.message['from_id'], msg_text.split('|')[0].split('[')[1]))
 
     elif 'погода' in msg_text or 'погоду' in msg_text:
         if 'завтра' in msg_text:
-            if random.randint(0,1) == 0:
-                send_msg_tochat(chat_id, weather.weather_tm())
-            else: send_msg_tochat(chat_id, weather.weater_api_yandx_tomorrow())
+            send_msg_tochat(chat_id, weather.weather_tm())
         else:
-            if random.randint(0, 1) == 0:
-                send_msg_tochat(chat_id, weather.weather_td())
-            else:
-                send_msg_tochat(chat_id, weather.weater_api_yandx_today())
+            send_msg_tochat(chat_id, weather.weather_td())
 
     elif 'расписание' in msg_text:
         send_photo_tochat(chat_id, attachment=schedule.schedule())
