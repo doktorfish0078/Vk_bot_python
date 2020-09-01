@@ -1,1 +1,1 @@
-worker: python Include\VkBotServer.py
+worker: python Include/VkBotServer.py
