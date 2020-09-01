@@ -1,1 +1,1 @@
-worker: python VkBotServer.py
+worker: python test.py
