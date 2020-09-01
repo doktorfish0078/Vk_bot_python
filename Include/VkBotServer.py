@@ -1,3 +1,5 @@
+# coding: utf8
+
 import random
 from Include.Commands import weather,schedule,skirmish,myanimelist,how_week,schedule_bus,list_commands
 
