@@ -138,7 +138,6 @@ def main():
             print("Получено сообщение")
             #record_queue_event(queue_event,event,len_queue=3)
             if event.from_chat: # Обработка сообщений из чата
-                send_msg_tochat(event.chat_id,"work")
                 parse_msg(event)
             elif event.from_user:
                 send_msg_touser(event.message['from_id'], input(event.message['text']))
