@@ -78,7 +78,7 @@ def parse_msg(event):
         send_msg_tochat(chat_id,list_commands.get_commands())
 
     if 'перестрелка' in msg_text and '|' in msg_text:
-        send_msg_tochat(chat_id, skirmish.skirmish(event.message['from_id'], msg_text.split('|')[0].split('[')[1]))
+        send_msg_tochat(chat_id, skirmish.skirmish(event.message['id'+'from_id'], msg_text.split('|')[0].split('[')[1]))
 
     elif 'погода' in msg_text or 'погоду' in msg_text:
         if 'завтра' in msg_text:
