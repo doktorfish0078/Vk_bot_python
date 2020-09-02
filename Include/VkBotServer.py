@@ -118,6 +118,8 @@ def parse_msg(event):
             send_msg_tochat(chat_id, diceroll.roll(vk_session, event.message['from_id']))
         elif 'dice' in msg_text:
             send_msg_tochat(chat_id, diceroll.diceroll(vk_session, event.message['from_id']))
+        elif 'flip' in msg_text:
+            send_msg_tochat(chat_id, diceroll.flip(vk_session, event.message['from_id']))
 
 
 def record_queue_event(queue_event,add_event,len_queue):

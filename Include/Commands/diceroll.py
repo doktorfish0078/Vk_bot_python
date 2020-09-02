@@ -18,4 +18,12 @@ def diceroll(vk_session, id):
             result
         )
     )
-    pass
+
+def flip(vk_session, id):
+    return(
+        '@id{0}({1}) бросает монетку, а выпадает ему {2}'.format(
+            id,
+            vk_session.method('users.get', {'user_ids': id})[0]['first_name'],
+            'решка' if randint(0, 1) == 1 else 'орел'
+        )
+    )
