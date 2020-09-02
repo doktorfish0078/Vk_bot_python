@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import random
-<<<<<<< Updated upstream
-from Include.Commands import weather, schedule, skirmish, myanimelist, how_week, schedule_bus, list_commands
-=======
+
 from Commands import weather, schedule, skirmish, myanimelist, how_week, schedule_bus, list_commands, diceroll
->>>>>>> Stashed changes
 
 from vk_api import VkApi, VkUpload
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
