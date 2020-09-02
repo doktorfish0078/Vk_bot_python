@@ -104,7 +104,7 @@ def parse_msg(event):
     elif 'тыква' in msg_text:
         send_msg_tochat(chat_id, 'А может ты ква??????!! Не понял')
     elif 'спасибо' in msg_text:
-        send_msg_tochat(chat_id, 'Если чем-то помог, то пожалуйста:3' if random.randint(1, 100) != 1 else 'Иди нахуй')
+        send_msg_tochat(chat_id, 'Если чем-то помог, то пожалуйста:3' if random.randint(1, 100) > 20 else 'Иди нахуй')
     elif 'сладкий' in msg_text or 'бот' in msg_text:
         send_msg_tochat(chat_id, 'Звали?')
     elif 'привет' in msg_text:
