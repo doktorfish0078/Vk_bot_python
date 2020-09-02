@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-weather_cond = {'Rain': 'дождик', 'Snow': 'снегопадик', 'Clouds': 'тучки', 'Clear': 'чистое небо'}
+
 parts = ['morning','day','evening','night']
 url = 'https://api.weather.yandex.ru/v2/forecast?'
 api_key_yandex = 'c585325e-939a-4e62-bfb1-af081d21f2ea'
@@ -14,37 +14,6 @@ params = {
     'lat': 'lat',
     'lon': 'lon'
 }
-
-def weather_today():
-    out_weather = 'Погода на сегодня:\n'
-    try:
-        weather = requests.get(
-            'http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=f8d86841539730fb1174d076209c76a7&q=Izhevsk,ru').json()['list']
-        for i in range(0, 7):
-            timetimetime = (i * 3) + 3
-            out_weather += "{0}:00, {1}ºC, {2} \n".format(
-                timetimetime if timetimetime > 10 else '0' + str(timetimetime),
-                int(float(weather[i]['main']['temp']) - 273.15),
-                weather_cond[weather[i]['weather'][0]['main']])
-        return out_weather
-    except BaseException:
-        return 'Погода недоступна в настоящее время!'
-
-
-def weather_tomorrow():
-    out_weather = 'Погода на завтра:\n'
-    try:
-        weather = requests.get(
-            'http://api.openweathermap.org/data/2.5/forecast?id=524901&APPID=f8d86841539730fb1174d076209c76a7&q=Izhevsk,ru').json()['list']
-        for i in range(7, 14):
-            timetimetime = ((i - 7) * 3) + 3
-            out_weather += "{0}:00, {1}ºC, {2} \n".format(
-                timetimetime if timetimetime > 10 else '0' + str(timetimetime),
-                int(float(weather[i]['main']['temp']) - 273.15),
-                weather_cond[weather[i]['weather'][0]['main']])
-        return out_weather
-    except BaseException:
-        return 'Погода недоступна в настоящее время!'
 
 
 def weather_td():

@@ -23,7 +23,7 @@ def get_path_schedule_bus(text_msg):
     #driver = webdriver.Chrome(options=chrome_options)
     opt = webdriver.FirefoxOptions()
     opt.add_argument("--headless")
-    driver = webdriver.Firefox(options=opt)
+    driver = webdriver.Firefox(options=opt, executable_path='./Commands/geckodriver')
     driver.set_window_size(1600, 2070)
     driver.get(URL)
     elem = driver.find_element_by_class_name("table-st1")

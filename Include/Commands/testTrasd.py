@@ -10,7 +10,7 @@ def get_schedule_bus():
     chrome_options.add_argument("--headless")
     opt = webdriver.FirefoxOptions()
     opt.add_argument("--headless")
-    driver = webdriver.Firefox(options=opt)
+    driver = webdriver.Firefox(options=opt, executable_path="geckodriver")
     #driver = webdriver.Chrome(options=chrome_options)
     driver.set_window_size(1600, 2070)
     driver.get(URL)
