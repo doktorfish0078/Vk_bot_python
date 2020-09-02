@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import random
+<<<<<<< Updated upstream
 from Include.Commands import weather, schedule, skirmish, myanimelist, how_week, schedule_bus, list_commands
+=======
+from Commands import weather, schedule, skirmish, myanimelist, how_week, schedule_bus, list_commands, diceroll
+>>>>>>> Stashed changes
 
 from vk_api import VkApi, VkUpload
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -80,7 +84,7 @@ def parse_msg(event):
         send_msg_tochat(chat_id,list_commands.get_commands())
 
     if 'перестрелка' in msg_text and '|' in msg_text:
-        send_msg_tochat(chat_id, skirmish.skirmish('id'+str(event.message['from_id']), msg_text.split('|')[0].split('[')[1]))
+        send_msg_tochat(chat_id, skirmish.skirmish(vk_session, event.message['from_id'], msg_text.split('|')[0].split('[')[1].split('d')[1]))
 
     elif 'погода' in msg_text or 'погоду' in msg_text:
         if 'завтра' in msg_text:
@@ -112,6 +116,11 @@ def parse_msg(event):
         send_msg_tochat(chat_id, myanimelist.get_top())
     elif 'секс' in msg_text:
         send_msg_tochat(chat_id, 'Ты тоже секс')
+    elif '/' in msg_text:
+        if 'roll' in msg_text:
+            send_msg_tochat(chat_id, diceroll.roll(vk_session, event.message['from_id']))
+        elif 'dice' in msg_text:
+            send_msg_tochat(chat_id, diceroll.diceroll(vk_session, event.message['from_id']))
 
 
 def record_queue_event(queue_event,add_event,len_queue):
