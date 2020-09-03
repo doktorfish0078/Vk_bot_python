@@ -25,17 +25,17 @@ def get_path_schedule_bus(text_msg):
     #chrome_options.add_argument("--headless")
     #driver = webdriver.Chrome(options=chrome_options)
     #firefox_binary = os.environ.get('FIREFOX_BIN', None)
-    opt = webdriver.FirefoxOptions()
-    opt.add_argument("--headless")
-    driver = webdriver.Firefox(options=opt)
-    driver.set_window_size(1600, 2070)
-    driver.get(URL)
-    elem = driver.find_element_by_class_name("table-st1")
-    elem.screenshot(
-        "screenshots\screen_" + now.strftime("%d-%m-%Y %H-%M-%S") + ".png")
-    driver.quit()
-    return "screenshots\screen_{0}.png".format(
-        now.strftime("%d-%m-%Y %H-%M-%S"))
+    #opt = webdriver.FirefoxOptions()
+    #opt.add_argument("--headless")
+    #driver = webdriver.Firefox(options=opt)
+    #driver.set_window_size(1600, 2070)
+    #driver.get(URL)
+    #elem = driver.find_element_by_class_name("table-st1")
+    #elem.screenshot(
+    #    "screenshots\screen_" + now.strftime("%d-%m-%Y %H-%M-%S") + ".png")
+    #driver.quit()
+    #return "screenshots\screen_{0}.png".format(
+       # now.strftime("%d-%m-%Y %H-%M-%S"))
         #print("Ошибка получения скриншота с адреса " + URL)
         #return "None"
 
