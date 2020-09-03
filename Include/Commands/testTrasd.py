@@ -15,7 +15,9 @@ def get_schedule_bus():
     rect = elem.rect  # {'height': 1041, 'width': 722, 'x': 562, 'y': 689}
     box = (rect['x'], rect['y'], rect['x'] + rect['width'], rect['y'] + rect['height'])
     im = Image.open(BytesIO(screen))
+    print(im)
     region = im.crop(box) # вырезаем
+    print(region)
     region.save("screenshots\screen_" + now.strftime("%d-%m-%Y %H-%M-%S") + ".png", 'PNG')
     driver.quit()
     print("Удачно")
