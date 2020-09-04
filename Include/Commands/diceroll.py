@@ -1,7 +1,7 @@
 from random import randint
 
 def roll(vk_session, id, min=1, max=100):
-    result = randint(min, max) if id != 146297737 else min
+    result = randint(min, max)
     return(
         "Случайное число для @id{0}({1}) от {2} до {3} равняется {4}".format(
             id,
@@ -10,7 +10,7 @@ def roll(vk_session, id, min=1, max=100):
     )
 
 def diceroll(vk_session, id):
-    result = randint(1, 6) if id != 146297737 else 1
+    result = randint(1, 6)
     return(
         '@id{0}({1}) бросает кубик и получает число {2}!'.format(
             id,
