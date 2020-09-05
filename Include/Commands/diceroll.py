@@ -3,7 +3,7 @@ import re
 
 def beautiful_num(num):
     new = '' if int(num)>=0 else '-'
-    for i in num:
+    for i in num[1:]:
         new += chr(ord(i) + 120744)
     return new
 
