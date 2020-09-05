@@ -12,10 +12,10 @@ def roll(vk_session, id, text_msg):
     min = 1
     max = 100
     try:
-        borders = re.search(r'\(\s*[\-+]?\d+\s*,\s*[\-+]?\d+\s*\)', text_msg).group()[1:-1].split(',')
+        pos = re.search(r'[\s(]?\s*[\-+]?\d+\s*,\s*[\-+]?\d+\s*[\s(]?', text_msg).span()
+        borders = (text_msg[pos[0]:pos[1]]).split(',')
         if int(borders[0]) > int(borders[1]):
             borders.reverse()
-        print(borders)
         min, max = borders
     except (AttributeError, TypeError):
         pass
