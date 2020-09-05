@@ -1,3 +1,3 @@
 from random import randint
 
-print('1' < '12')
+print(ord('♟'))
