@@ -2,9 +2,9 @@ from random import randint
 import re
 
 def beautiful_num(num):
-    new = ''
+    new = '' if int(num)>=0 else '-'
     for i in num:
-        new += chr(ord(i) + (120744 if ord(i)>48 and ord(i)>57 else 0))
+        new += chr(ord(i) + 120744)
     return new
 
 
