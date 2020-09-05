@@ -2,8 +2,12 @@ from random import randint
 import re
 
 def beautiful_num(num):
-    new = '' if int(num)>=0 else '-'
-    for i in num[1:]:
+    if int(num) >= 0:
+        new = ''
+    else:
+        new = '-'
+        num=num[1:]
+    for i in num:
         new += chr(ord(i) + 120744)
     return new
 
