@@ -1,4 +1,5 @@
 from random import randint
+import re
 
 def beautiful_num(num):
     new = ''
@@ -7,8 +8,18 @@ def beautiful_num(num):
     return new
 
 
-def roll(vk_session, id, min=1, max=100):
-    result = str(randint(min, max))
+def roll(vk_session, id, text_msg):
+    min = 1
+    max = 100
+    try:
+        borders = re.search(r'\(\s*[\-+]?\d+\s*,\s*[\-+]?\d+\s*\)', text_msg).group()[1:-1].split(',')
+        if int(borders[0]) > int(borders[1]):
+            borders.reverse()
+        print(borders)
+        min, max = borders
+    except (AttributeError, TypeError):
+        return('Соси')
+    result = str(randint(int(min), int(max)))
     return(
         "Случайное число  для @id{0}({1}) от {2} до {3} равняется {4}".format(
             id,
