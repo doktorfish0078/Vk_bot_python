@@ -18,7 +18,7 @@ def roll(vk_session, id, text_msg):
         print(borders)
         min, max = borders
     except (AttributeError, TypeError):
-        return('Соси')
+        pass
     result = str(randint(int(min), int(max)))
     return(
         "Случайное число  для @id{0}({1}) от {2} до {3} равняется {4}".format(

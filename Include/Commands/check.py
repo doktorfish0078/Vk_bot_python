@@ -1,3 +1,3 @@
-a = 'kjawhflakj'
-print(a[5])
-print(type(ord('𝟘') - ord('0')))
+from random import randint
+
+print('1' < '12')
