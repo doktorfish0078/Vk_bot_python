@@ -13,6 +13,8 @@ def beautiful_num(num):
 
 
 def roll(vk_session, id, text_msg):
+    min = 1
+    max = 100
     try:
         borders = \
             [int(border) for border in re.search(r' *[\-+]?\d+ *, *[\-+]?\d+ *', text_msg).group().split(',')]
