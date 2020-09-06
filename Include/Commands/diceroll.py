@@ -13,15 +13,13 @@ def beautiful_num(num):
 
 
 def roll(vk_session, id, text_msg):
-    min = 1
-    max = 100
     try:
-        pos = re.search(r'[\s(]?\s*[\-+]?\d+\s*,\s*[\-+]?\d+\s*[\s(]?', text_msg).span()
-        borders = (text_msg[pos[0]:pos[1]]).split(',')
-        if int(borders[0]) > int(borders[1]):
-            borders.reverse()
+        borders = \
+            [int(border) for border in re.search(r' *[\-+]?\d+ *, *[\-+]?\d+ *', text_msg).group().split(',')]
+        borders.sort()
         min, max = borders
-    except (AttributeError, TypeError):
+    except (AttributeError, TypeError, ValueError):
+        # print("/roll crashed or auto-bordered")
         pass
     result = str(randint(int(min), int(max)))
     return(
