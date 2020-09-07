@@ -105,6 +105,10 @@ def parse_msg(event):
         send_msg_tochat(chat_id, 'А может ты ква??????!! Не понял')
     elif 'спасибо' in msg_text:
         send_msg_tochat(chat_id, 'Если чем-то помог, то пожалуйста:3' if random.randint(1, 100) > 20 else 'Иди нахуй')
+    elif ('привет' in msg_text or 'здравствуй' in msg_text) and ('сладкий' in msg_text or 'бот' in msg_text):
+        send_msg_tochat(chat_id, 'Приветик, @id{0}({1})  :-)'.format(
+            event.message['from_id'],
+            vk_session.method('users.get', {'user_ids': event.message['from_id']})[0]['first_name']))
     elif 'сладкий' in msg_text or 'бот' in msg_text:
         send_msg_tochat(chat_id, 'Звали?')
     elif 'привет' in msg_text:
