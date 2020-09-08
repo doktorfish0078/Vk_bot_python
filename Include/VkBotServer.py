@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
+# лох по кличке ортом id = 146297737
 
 import random
 
-from Commands import weather, schedule, skirmish, myanimelist, how_week, schedule_bus, list_commands, diceroll
+from Commands import weather, schedule, skirmish, myanimelist,\
+    how_week, schedule_bus, list_commands, diceroll, greet
 
 from vk_api import VkApi, VkUpload
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
 token = "ee5ee2a15eae712b0b63dd92847a7a06cc9e5e0b4014d430b7fdde83897d9cd9cea7978a0754aae391607"
 group_id = "186084635"
+
+ortom_id = 146297737
 
 # Для Long Poll
 vk_session = VkApi(token=token)
@@ -21,7 +25,6 @@ upload = VkUpload(vk_session)
 
 # Для вызова методов vk_api
 #vk_api = vk_session.get_api()
-
 
 def send_msg_tochat(chat_id, message):
     """
@@ -106,7 +109,11 @@ def parse_msg(event):
     elif 'спасибо' in msg_text:
         send_msg_tochat(chat_id, 'Если чем-то помог, то пожалуйста:3' if random.randint(1, 100) > 20 else 'Иди нахуй')
     elif ('привет' in msg_text or 'здравствуй' in msg_text) and ('сладкий' in msg_text or 'бот' in msg_text):
-        send_msg_tochat(chat_id, 'Приветик, @id{0}({1})  :-)'.format(
+        if event.message['from_id'] == ortom_id:
+            hello = ortom_hello() + ', @id{0}({1}  :-)'
+        else:
+            hello = 'Приветик, @id{0}({1})  :-)'
+        send_msg_tochat(chat_id, hello.format(
             event.message['from_id'],
             vk_session.method('users.get', {'user_ids': event.message['from_id']})[0]['first_name']))
     elif 'сладкий' in msg_text or 'бот' in msg_text:
