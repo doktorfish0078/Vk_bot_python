@@ -21,7 +21,7 @@ ortom_id = 146297737
 vk_session = VkApi(token=token)
 
 # Для использоания Long Poll API
-longpoll = VkBotLongPoll(vk_session, group_id, wait=30)
+longpoll = VkBotLongPoll(vk_session, group_id, wait=10)
 
 # Для загрузки фото и других мультимедиа в сообщения
 upload = VkUpload(vk_session)
@@ -106,6 +106,7 @@ def parse_msg(event):
     msg_text = event.message['text'].lower()
     chat_id = event.chat_id
     sender_id = event.message['from_id']
+    print(chat_id)
 
 
     if (sender_id not in events_of_users.keys()) or (time() - events_of_users[sender_id][0] > 300):
@@ -116,12 +117,18 @@ def parse_msg(event):
         send_msg_tochat(chat_id, list_commands.get_commands())
 
     if 'перестрелка' in msg_text and '|' in msg_text:
+        try:
+            result = skirmish.skirmish(vk_session, sender_id, int(msg_text.split('|')[0].split('[')[1][2:]))
 
-        result = skirmish.skirmish(vk_session, sender_id, int(msg_text.split('|')[0].split('[')[1][2:]))
-        send_msg_tochat(chat_id, result[0])
+            send_msg_tochat(chat_id, result[0])
 
-        events_of_users[sender_id][0] = time()
-        events_of_users[sender_id][1] = [result[1], 's']
+            events_of_users[sender_id][0] = time()
+            events_of_users[sender_id][1] = [result[1], 's']
+
+        except BaseException:
+            send_msg_tochat(chat_id, "Ты по кому стрелаешь, ТЫ по кому стреляешь, АЛО?")
+
+
 
     elif 'погода' in msg_text or 'погоду' in msg_text:
 

@@ -1,8 +1,9 @@
 import random
 
 
-def skirmish(vk_session, player1, player2):
-    a = random.randint(0, 1)
+def skirmish(vk_session, player1, player2, gm=False):
+    if not gm:
+        a = random.randint(0, 1)
     if player1 == player2:
         return ('Нельзя в себя стрелять, а то зароскомнадзоришься', (player1, player2))
     elif player1 == 146297737:
