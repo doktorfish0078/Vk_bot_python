@@ -1,3 +1,6 @@
-from random import randint
+import time
 
-print(ord('♟'))
+a = (15)
+a[0] = 12
+
+print(a[1])

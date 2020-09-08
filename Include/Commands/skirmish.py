@@ -4,24 +4,24 @@ import random
 def skirmish(vk_session, player1, player2):
     a = random.randint(0, 1)
     if player1 == player2:
-        return 'Нельзя в себя стрелять, а то зароскомнадзоришься'
+        return ('Нельзя в себя стрелять, а то зароскомнадзоришься', (player1, player2))
     elif player1 == 146297737:
-        return  'Победителем вышел @id{0}({1})'.format(
+        return ('Победитель, палучаица, @id{0}({1})'.format(
             player2,
             vk_session.method('users.get', {'user_ids': player2})[0]['first_name']
-        )
+        ), (player2, player1))
     elif player2 == 146297737:
-        return 'Победителем вышел @id{0}({1})'.format(
+        return ('Победитель, палучаица, @id{0}({1})'.format(
             player1,
             vk_session.method('users.get', {'user_ids': player1})[0]['first_name']
-        )
+        ), (player1, player2))
     elif a == 0:
-        return 'Победителем вышел @id{0}({1})'.format(
+        return ('Победитель, палучаица, @id{0}({1})'.format(
             player1,
             vk_session.method('users.get', {'user_ids': player1})[0]['first_name']
-        )
+        ), (player1, player2))
     else:
-        return 'Победителем вышел @id{0}({1})'.format(
+        return ('Победитель, палучаица, @id{0}({1})'.format(
             player2,
             vk_session.method('users.get', {'user_ids': player2})[0]['first_name']
-        )
+        ), (player2, player1))
