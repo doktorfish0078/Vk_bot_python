@@ -16,6 +16,7 @@ group_id = "186084635"
 
 
 ortom_id = 146297737
+god_party = [378922227, 169026012, 135224919]
 
 # Для Long Poll
 vk_session = VkApi(token=token)
@@ -205,8 +206,21 @@ def parse_msg(event):
             events_of_users[sender_id][0] = time()
             events_of_users[sender_id][1] = [result[1], 'f']
 
-        elif 'test_spd' in msg_text:
-            send_msg_tochat(chat_id, time()-got_time)
+        elif 'punish' in msg_text:
+            try:
+                enemy_id = int(msg_text.split('|')[0].split('[')[1][2:])
+            except BaseException:
+                pass
+            if sender_id in god_party:
+                    send_msg_tochat(1, 'Пососи, {0} @id{1}({2})'.format(
+                        ("собакоподобная пакость, не становись ортомом," if vk_session.method('users.get', {'user_ids': enemy_id, 'fields': 'sex'})[0]['sex'] == 1
+                         else "попущенный под столиком, грязный пасынок собаки"), enemy_id, vk_session.method('users.get', {'user_ids': enemy_id})[0]['first_name']))
+            else:
+                    enemy_id = int(msg_text.split('|')[0].split('[')[1][2:])
+                    send_msg_tochat(1, '{0} {1}'.format(vk_session.method('users.get',
+                    {'user_ids': enemy_id, 'name_case': 'gen'})[0]['first_name'], "попыталась отлизать сама у себя, но обосралась"
+                    if vk_session.method('users.get', {'user_ids': id, 'fields': 'sex'})[0]['sex'] == 1  else "Попытался отсосать сам у себя, но обосрался"))
+
 
     elif 'спасибо' in msg_text:
         if events_of_users[sender_id][1][1]:
@@ -224,12 +238,10 @@ def main():
     :return:
     """
     print("Бот приступил к работе")
-    global got_time
     #queue_event = []
     for event in longpoll.listen(): # Слушаем сервер
         if event.type == VkBotEventType.MESSAGE_NEW:
             print("Получено сообщение")
-            got_time = time()
             if event.from_chat: # Обработка сообщений из чата
                 parse_msg(event)
             elif event.from_user:
