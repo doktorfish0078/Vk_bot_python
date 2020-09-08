@@ -6,22 +6,22 @@ def skirmish(vk_session, player1, player2):
     if player1 == player2:
         return 'Нельзя в себя стрелять, а то зароскомнадзоришься'
     elif player1 == 146297737:
-        return 'Победителем вышел @id{0}({1})'.format(
+        return 'Победитель, палучаица, @id{0}({1})'.format(
             player2,
             vk_session.method('users.get', {'user_ids': player2})[0]['first_name']
         )
     elif player2 == 146297737:
-        return 'Победителем вышел @id{0}({1})'.format(
+        return 'Победитель, палучаица, @id{0}({1})'.format(
             player1,
             vk_session.method('users.get', {'user_ids': player1})[0]['first_name']
         )
     elif a == 0:
-        return 'Победителем вышел @id{0}({1})'.format(
+        return 'Победитель, палучаица, @id{0}({1})'.format(
             player1,
             vk_session.method('users.get', {'user_ids': player1})[0]['first_name']
         )
     else:
-        return 'Победителем вышел @id{0}({1})'.format(
+        return 'Победитель, палучаица, @id{0}({1})'.format(
             player2,
             vk_session.method('users.get', {'user_ids': player2})[0]['first_name']
         )
