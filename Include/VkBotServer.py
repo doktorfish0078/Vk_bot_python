@@ -110,7 +110,7 @@ def parse_msg(event):
         send_msg_tochat(chat_id, 'Если чем-то помог, то пожалуйста:3' if random.randint(1, 100) > 20 else 'Иди нахуй')
     elif ('привет' in msg_text or 'здравствуй' in msg_text) and ('сладкий' in msg_text or 'бот' in msg_text):
         if event.message['from_id'] == ortom_id:
-            hello = ortom_hello() + ', @id{0}({1}  :-)'
+            hello = greet.ortom_hello() + ', @id{0}({1})  :-)'
         else:
             hello = 'Приветик, @id{0}({1})  :-)'
         send_msg_tochat(chat_id, hello.format(
