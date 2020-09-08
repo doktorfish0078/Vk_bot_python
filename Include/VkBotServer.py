@@ -114,16 +114,14 @@ def parse_msg(event):
     elif 'спасибо' in msg_text:
         send_msg_tochat(chat_id, 'Если чем-то помог, то пожалуйста:3' if random.randint(1, 5) > 1 else 'Иди нахуй')
     elif ('привет' in msg_text or 'здравствуй' in msg_text) and ('сладкий' in msg_text or 'бот' in msg_text) and \
-                    (greeted[event.message['from_id']] > 600 if event.message['from_id'] in greeted.keys() else True):
+                    ((greeted[event.message['from_id']] - time()) > 6000 if event.message['from_id'] in greeted.keys() else True):
         greeted[event.message['from_id']] = time()
         if event.message['from_id'] == ortom_id:
             hello = greet.ortom_hello()
         else:
-            greet.hello()
+            hello = greet.hello()
         send_msg_tochat(chat_id, hello.format(
             vk_session.method('users.get', {'user_ids': event.message['from_id']})[0]['first_name']))
-    elif 'сладкий' in msg_text or 'бот' in msg_text:
-        send_msg_tochat(chat_id, 'Звали?')
     elif 'аниме' in msg_text:
         send_msg_tochat(chat_id, myanimelist.get_top())
     elif 'секс' in msg_text:
@@ -157,8 +155,6 @@ def main():
     print("Бот приступил к работе")
     #queue_event = []
     for event in longpoll.listen(): # Слушаем сервер
-        for key in greeted.keys():
-            greeted[key] += time() - greeted[key]
         if event.type == VkBotEventType.MESSAGE_NEW:
             print("Получено сообщение")
             #record_queue_event(queue_event,event,len_queue=3)
