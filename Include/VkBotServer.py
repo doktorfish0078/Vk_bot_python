@@ -114,7 +114,7 @@ def parse_msg(event):
     elif 'спасибо' in msg_text:
         send_msg_tochat(chat_id, 'Если чем-то помог, то пожалуйста:3' if random.randint(1, 5) > 1 else 'Иди нахуй')
     elif ('привет' in msg_text or 'здравствуй' in msg_text) and ('сладкий' in msg_text or 'бот' in msg_text) and \
-                    ((greeted[event.message['from_id']] - time()) > 600 if event.message['from_id'] in greeted.keys() else True):
+                    ((time() - greeted[event.message['from_id']]) > 6000 if event.message['from_id'] in greeted.keys() else True):
         greeted[event.message['from_id']] = time()
         if event.message['from_id'] == ortom_id:
             hello = greet.ortom_hello()
