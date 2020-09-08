@@ -1,3 +1,6 @@
 import time
 
-print(time.time())
+a = {}
+
+
+print(a['g'])
