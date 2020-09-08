@@ -1,6 +1,6 @@
 import time
 
-a = {}
+a = (15)
+a[0] = 12
 
-
-print(a['g'])
+print(a[1])

@@ -31,6 +31,26 @@ upload = VkUpload(vk_session)
 
 greeted = {}
 
+"""
+ Идея в том, что мы будем записывать ивенты для каждого отдельного пользователя 
+ в словарь.
+ В словаре имеется структура {id: [время ласт запроса:int, [ивент, ивент, ивент...]]}
+ По сообщению "Спасибо" массив очищается для отдельного пользователя И для пользователя,
+  вызывавшего ту-же предпоследнюю команду (до Спасибо) 
+  Значения в events_of_users[sender_id][1]:
+   "q" - вопрос
+   "h" - приветствие
+   "g" - игровое действие (перестрелка и тп)
+   "w" - погода
+   "word" - слово (секс/хуета и тп)
+   "r" - /roll !!! Значение /roll сохраняется предидущим элементом перед "r" !!!
+   "d" - /diceroll !!! Значение /diceroll сохраняется предидущим элементом перед "d" !!!
+   "f" - /flip !!! Значение /flip сохраняется предидущим элементом перед "f" !!!
+  
+"""
+
+events_of_users = {}
+
 def send_msg_tochat(chat_id, message):
     """
     Отправка сообщения через метод messages.send
@@ -84,23 +104,33 @@ def send_photo_tochat(chat_id, path_to_photo=None, attachment=None):
 def parse_msg(event):
     msg_text = event.message['text'].lower()
     chat_id = event.chat_id
+    sender_id = event.message['from_id']
+
+    if sender_id not in events_of_users.keys():
+        events_of_users[sender_id] = [None]
 
     if "help" in msg_text or "команды" in msg_text:
         send_msg_tochat(chat_id,list_commands.get_commands())
 
     if 'перестрелка' in msg_text and '|' in msg_text:
-        send_msg_tochat(chat_id, skirmish.skirmish(vk_session, event.message['from_id'], int(msg_text.split('|')[0].split('[')[1][2:])))
+        send_msg_tochat(chat_id, skirmish.skirmish(vk_session, sender_id, int(msg_text.split('|')[0].split('[')[1][2:])))
 
     elif 'погода' in msg_text or 'погоду' in msg_text:
+        events_of_users[sender_id][0] = time()
+        events_of_users[sender_id][1].append('w')
         if 'завтра' in msg_text:
             send_msg_tochat(chat_id, weather.weather_tm())
         else:
             send_msg_tochat(chat_id, weather.weather_td())
 
     elif 'расписание' in msg_text:
+        events_of_users[sender_id][0] = time()
+        events_of_users[sender_id][1].append('q')
         send_photo_tochat(chat_id, attachment=schedule.schedule())
 
     elif 'неделя' in msg_text and 'какая' in msg_text:
+        events_of_users[sender_id][0] = time()
+        events_of_users[sender_id][1].append('q')
         send_msg_tochat(chat_id, how_week.how_week())
 
     #elif 'автобус' in msg_text or 'автобуса' in msg_text:
@@ -114,15 +144,15 @@ def parse_msg(event):
     elif 'спасибо' in msg_text:
         send_msg_tochat(chat_id, 'Если чем-то помог, то пожалуйста:3' if random.randint(1, 5) > 1 else 'Иди нахуй')
     elif ('привет' in msg_text or 'здравствуй' in msg_text) and ('сладкий' in msg_text or 'бот' in msg_text) and \
-                    ((time() - greeted[event.message['from_id']]) > 6000 if event.message['from_id'] in greeted.keys() else True):
-        greeted[event.message['from_id']] = time()
-        if event.message['from_id'] == ortom_id:
+                    ((time() - greeted[sender_id]) > 6000 if sender_id in greeted.keys() else True):
+        greeted[sender_id] = time()
+        if sender_id == ortom_id:
             hello = greet.ortom_hello()
         else:
             hello = greet.hello()
         send_msg_tochat(chat_id,
                         hello.format(
-                            vk_session.method('users.get', {'user_ids': event.message['from_id']})[0]['first_name'])
+                            vk_session.method('users.get', {'user_ids': sender_id})[0]['first_name'])
                         )
     elif 'аниме' in msg_text:
         send_msg_tochat(chat_id, myanimelist.get_top())
@@ -130,11 +160,11 @@ def parse_msg(event):
         send_msg_tochat(chat_id, 'Ты тоже секс')
     elif '/' in msg_text:
         if 'roll' in msg_text:
-            send_msg_tochat(chat_id, diceroll.roll(vk_session, event.message['from_id'], msg_text))
+            send_msg_tochat(chat_id, diceroll.roll(vk_session, sender_id, msg_text))
         elif 'dice' in msg_text:
-            send_msg_tochat(chat_id, diceroll.diceroll(vk_session, event.message['from_id']))
+            send_msg_tochat(chat_id, diceroll.diceroll(vk_session, sender_id))
         elif 'flip' in msg_text:
-            send_msg_tochat(chat_id, diceroll.flip(vk_session, event.message['from_id']))
+            send_msg_tochat(chat_id, diceroll.flip(vk_session, sender_id))
 
 
 def record_queue_event(queue_event,add_event,len_queue):
@@ -159,12 +189,15 @@ def main():
     for event in longpoll.listen(): # Слушаем сервер
         if event.type == VkBotEventType.MESSAGE_NEW:
             print("Получено сообщение")
-            #record_queue_event(queue_event,event,len_queue=3)
             if event.from_chat: # Обработка сообщений из чата
                 parse_msg(event)
             elif event.from_user:
-                send_msg_touser(event.message['from_id'], input(event.message['text']))
-        # Обработка личных сообщений сообщества
+                pass
+                """ 
+                    Эту шнягу, я сичтаю, нужно доработать потом отдельно
+                    >Обработка личных сообщений
+                """
+                # send_msg_touser(event.message['from_id'], input(event.message['text']))
 
 if __name__ == '__main__':
     main()
