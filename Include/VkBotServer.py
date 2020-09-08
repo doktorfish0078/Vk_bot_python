@@ -223,10 +223,9 @@ def parse_msg(event):
                         ("собакоподобная пакость, не становись ортомом," if vk_session.method('users.get', {'user_ids': enemy_id, 'fields': 'sex'})[0]['sex'] == 1
                          else "попущенный под столиком, грязный пасынок собаки"), enemy_id, vk_session.method('users.get', {'user_ids': enemy_id})[0]['first_name']))
             else:
-                    enemy_id = int(msg_text.split('|')[0].split('[')[1][2:])
                     send_msg_tochat(1, '{0} {1}'.format(vk_session.method('users.get',
-                    {'user_ids': enemy_id, 'name_case': 'gen'})[0]['first_name'], "попыталась отлизать сама у себя, но обосралась"
-                    if vk_session.method('users.get', {'user_ids': id, 'fields': 'sex'})[0]['sex'] == 1  else "Попытался отсосать сам у себя, но обосрался"))
+                    {'user_ids': sender_id})[0]['first_name'], "попыталась отлизать сама у себя, но обосралась"
+                    if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1  else "Попытался отсосать сам у себя, но обосрался"))
 
 
     elif 'спасибо' in msg_text:
