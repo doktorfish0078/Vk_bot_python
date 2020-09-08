@@ -40,12 +40,11 @@ greeted = {}
   Значения в events_of_users[sender_id][1]:
    "q" - вопрос
    "h" - приветствие
-   "g" - игровое действие (перестрелка и тп)
+   "s" - перестрелка !!! Результат сохраняется в формате [победивший, проигравший] предыдущим элементом перед "s" !!!
    "w" - погода
-   "word" - слово (секс/хуета и тп)
-   "r" - /roll !!! Значение /roll сохраняется предидущим элементом перед "r" !!!
-   "d" - /diceroll !!! Значение /diceroll сохраняется предидущим элементом перед "d" !!!
-   "f" - /flip !!! Значение /flip сохраняется предидущим элементом перед "f" !!!
+   "r" - /roll !!! Значение /roll сохраняется предыдущим элементом перед "r" !!!
+   "d" - /diceroll !!! Значение /diceroll сохраняется предыдущим элементом перед "d" !!!
+   "f" - /flip !!! Значение /flip сохраняется предыдущим элементом перед "f" !!!
   
 """
 
@@ -106,18 +105,25 @@ def parse_msg(event):
     chat_id = event.chat_id
     sender_id = event.message['from_id']
 
-    if sender_id not in events_of_users.keys():
-        events_of_users[sender_id] = [None]
+    if (sender_id not in events_of_users.keys()):
+        events_of_users[sender_id] = [time(), [None]]
+
+    if (time() - events_of_users[sender_id][0] > 600):
+        events_of_users[sender_id] = [time(), [None]]
+
 
     if "help" in msg_text or "команды" in msg_text:
-        send_msg_tochat(chat_id,list_commands.get_commands())
+        send_msg_tochat(chat_id, list_commands.get_commands())
 
     if 'перестрелка' in msg_text and '|' in msg_text:
-        send_msg_tochat(chat_id, skirmish.skirmish(vk_session, sender_id, int(msg_text.split('|')[0].split('[')[1][2:])))
+        events_of_users[sender_id][0] = time()
+        result = skirmish.skirmsh(vk_session, sender_id, int(msg_text.split('|')[0].split('[')[1][2:]))
+        send_msg_tochat(chat_id, result[0])
+        events_of_users[sender_id][1] = [result[1], 's']
 
     elif 'погода' in msg_text or 'погоду' in msg_text:
         events_of_users[sender_id][0] = time()
-        events_of_users[sender_id][1].append('w')
+        events_of_users[sender_id][1] = ['w']
         if 'завтра' in msg_text:
             send_msg_tochat(chat_id, weather.weather_tm())
         else:
