@@ -133,7 +133,7 @@ def parse_msg(event):
 
         else:
             result = weather.weather()
-            send_msg_tochat(chat_id, result)
+            send_msg_tochat(chat_id, result[0])
             events_of_users[sender_id][1] = [result[1], 'w']
 
     elif 'расписание' in msg_text:
