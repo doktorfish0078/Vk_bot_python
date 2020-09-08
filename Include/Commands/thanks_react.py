@@ -16,7 +16,8 @@ def react(vk_session, sender_id, last_q, last_result=None):
         'q': quest_r,
         'w': weather_r,
         'a': anime_r,
-        's': skirm_r
+        's': skirm_r,
+        'rasp': rasp_r
     }
     return reacts.get(last_q)(last_result)
 
@@ -73,3 +74,6 @@ def skirm_r(result):
             vk.method('users.get', {'user_ids': result[1], 'name_case': 'gen'})[0]['first_name']
         )
     )
+
+def rasp_r(_):
+    return "Всегда пожалуйста, и не опаздай на пару!"

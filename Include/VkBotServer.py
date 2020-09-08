@@ -46,6 +46,7 @@ greeted = {}
    "r" - /roll !!! Значение /roll сохраняется предыдущим элементом перед "r" !!!
    "d" - /diceroll !!! Значение /diceroll сохраняется предыдущим элементом перед "d" !!!
    "f" - /flip !!! Значение /flip сохраняется предыдущим элементом перед "f" !!!
+   "rasp" - Расписание
   
 """
 
@@ -139,7 +140,7 @@ def parse_msg(event):
     elif 'расписание' in msg_text:
 
         events_of_users[sender_id][0] = time()
-        events_of_users[sender_id][1] = [None, 'q']
+        events_of_users[sender_id][1] = [None, 'rasp']
 
         send_photo_tochat(chat_id, attachment=schedule.schedule())
 
