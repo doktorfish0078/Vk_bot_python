@@ -205,6 +205,9 @@ def parse_msg(event):
             events_of_users[sender_id][0] = time()
             events_of_users[sender_id][1] = [result[1], 'f']
 
+        elif 'test_spd' in msg_text:
+            send_msg_tochat(chat_id, time()-got_time)
+
     elif 'спасибо' in msg_text:
         if events_of_users[sender_id][1][1]:
             send_msg_tochat(chat_id, thanks_react.react(vk_session, sender_id,
@@ -221,10 +224,12 @@ def main():
     :return:
     """
     print("Бот приступил к работе")
+    global got_time
     #queue_event = []
     for event in longpoll.listen(): # Слушаем сервер
         if event.type == VkBotEventType.MESSAGE_NEW:
             print("Получено сообщение")
+            got_time = time()
             if event.from_chat: # Обработка сообщений из чата
                 parse_msg(event)
             elif event.from_user:
