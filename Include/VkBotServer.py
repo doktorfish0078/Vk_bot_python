@@ -123,8 +123,6 @@ def parse_msg(event):
             vk_session.method('users.get', {'user_ids': event.message['from_id']})[0]['first_name']))
     elif 'сладкий' in msg_text or 'бот' in msg_text:
         send_msg_tochat(chat_id, 'Звали?')
-    elif 'привет' in msg_text:
-        send_msg_tochat(chat_id, 'Здравствуй')
     elif 'аниме' in msg_text:
         send_msg_tochat(chat_id, myanimelist.get_top())
     elif 'секс' in msg_text:
