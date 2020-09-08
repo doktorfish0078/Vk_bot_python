@@ -11,4 +11,4 @@ def hello():
     hello_str = ['Приветик, {0} ', 'Здравствуй, {0} ', 'Снова ты, {0}? ',
                  'Уже вернулись, {0}? ', 'Хо-хо, а я тебя не ждал, {0} ',
                  '{0}, какая встреча! ']
-    return hello_str[randint(0, len(hello_str))] + smiles[randint(0, len(hello_str))]
+    return hello_str[randint(0, len(hello_str) -1)] + smiles[randint(0, len(hello_str) -1)]
