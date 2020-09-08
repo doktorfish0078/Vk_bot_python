@@ -1,3 +1,3 @@
-from random import randint
+import time
 
-print(ord('♟'))
+print(time.time())
