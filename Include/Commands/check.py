@@ -1,6 +1,3 @@
-import time
+a = [10]
 
-a = (15)
-a[0] = 12
-
-print(a[1])
+print(True if a[0] else False)
