@@ -50,6 +50,7 @@ greeted = {}
 
 events_of_users = {}
 
+
 def send_msg_tochat(chat_id, message):
     """
     Отправка сообщения через метод messages.send
@@ -191,7 +192,6 @@ def main():
     :return:
     """
     print("Бот приступил к работе")
-    #queue_event = []
     for event in longpoll.listen(): # Слушаем сервер
         if event.type == VkBotEventType.MESSAGE_NEW:
             print("Получено сообщение")
