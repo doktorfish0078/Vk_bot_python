@@ -109,10 +109,8 @@ def parse_msg(event):
     sender_id = event.message['from_id']
     print(chat_id)
 
-
     if (sender_id not in events_of_users.keys()) or (time() - events_of_users[sender_id][0] > 300):
         events_of_users[sender_id] = [time(), [None, None]]
-
 
     if "help" in msg_text or "команды" in msg_text:
         send_msg_tochat(chat_id, list_commands.get_commands())
@@ -128,7 +126,6 @@ def parse_msg(event):
 
         except BaseException:
             send_msg_tochat(chat_id, "Ты по кому стрелаешь, ТЫ по кому стреляешь, АЛО?")
-
 
 
     elif 'погода' in msg_text or 'погоду' in msg_text:
@@ -225,7 +222,7 @@ def parse_msg(event):
             else:
                     send_msg_tochat(1, '{0} {1}'.format(vk_session.method('users.get',
                     {'user_ids': sender_id})[0]['first_name'], "попыталась отлизать сама у себя, но обосралась"
-                    if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1  else "Попытался отсосать сам у себя, но обосрался"))
+                    if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1  else "попытался отсосать сам у себя, но обосрался"))
 
 
     elif 'спасибо' in msg_text:

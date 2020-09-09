@@ -18,7 +18,7 @@ def weather(tomorrow = False):
         out_weather = ['Погода на {}:\n'.format(day), weather_condition[2].text]
         temp = weather[numb_card_for_parsing].find_all('span', {'class', 'temp__value'})
         for day in range(len(timeday)):
-            timeday[day] += '{} '.format(weather_condition[day].text)
+            timeday[day] += '{}: '.format(weather_condition[day].text)
             for i in range(day * 3, (day + 1) * 3):
                 if day * 3 + 1 == i:
                     timeday[day] += '...'
