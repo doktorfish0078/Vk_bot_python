@@ -4,3 +4,4 @@ requests==2.24.0
 selenium==3.141.0
 vk-api==11.8.0
 Pillow==7.2.0
+wikipedia==1.4.0
