@@ -167,8 +167,7 @@ def parse_msg(event):
         events_of_users[sender_id][1] = [None, 'q']
 
         send_msg_tochat(chat_id, how_week.how_week())
-    elif 'вики' in msg_text or 'википедия' in msg_text:
-        send_msg_tochat(chat_id, test_wiki.wiki_searching(msg_text))
+
     #elif 'автобус' in msg_text or 'автобуса' in msg_text:
         #send_msg_tochat(chat_id, "Ищу где Ваш автобус,подождите немного...")
         #send_photo_tochat(chat_id, path_to_photo=schedule_bus.get_path_schedule_bus(msg_text))
@@ -223,6 +222,7 @@ def parse_msg(event):
             events_of_users[sender_id][0] = time()
             events_of_users[sender_id][1] = [result[1], 'f']
 
+
         elif 'punish' in msg_text:
             try:
                 enemy_id = int(msg_text.split('|')[0].split('[')[1][2:])
@@ -236,7 +236,8 @@ def parse_msg(event):
                     send_msg_tochat(1, '{0} {1}'.format(vk_session.method('users.get',
                     {'user_ids': sender_id})[0]['first_name'], "попыталась отлизать сама у себя, но обосралась"
                     if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1  else "попытался отсосать сам у себя, но обосрался"))
-
+        elif 'вики' in msg_text or 'википедия' in msg_text:
+            send_msg_tochat(chat_id, test_wiki.wiki_searching(msg_text))
 
     elif 'спасибо' in msg_text:
         if events_of_users[sender_id][1][1]:
