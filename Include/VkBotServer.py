@@ -4,7 +4,7 @@
 import random
 
 from Commands import weather, schedule, skirmish, myanimelist,\
-    how_week, schedule_bus, list_commands, diceroll, greet, thanks_react, test_wiki
+    how_week, schedule_bus, list_commands, diceroll, greet, thanks_react
 
 from vk_api import VkApi, VkUpload
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -168,7 +168,7 @@ def parse_msg(event):
 
         send_msg_tochat(chat_id, how_week.how_week())
     #elif 'вики' in msg_text or 'википедия':
-        #send_msg_tochat(chat_id,test_wiki.wiki_searching(msg_text))
+        #send_msg_tochat(chat_id, test_wiki.wiki_searching(msg_text))
     #elif 'автобус' in msg_text or 'автобуса' in msg_text:
         #send_msg_tochat(chat_id, "Ищу где Ваш автобус,подождите немного...")
         #send_photo_tochat(chat_id, path_to_photo=schedule_bus.get_path_schedule_bus(msg_text))
