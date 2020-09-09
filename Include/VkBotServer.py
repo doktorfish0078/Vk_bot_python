@@ -4,7 +4,7 @@
 import random
 
 from Commands import weather, schedule, skirmish, myanimelist,\
-    how_week, schedule_bus, list_commands, diceroll, greet
+    how_week, schedule_bus, list_commands, diceroll, greet, thanks_react
 
 from vk_api import VkApi, VkUpload
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -16,12 +16,13 @@ group_id = "186084635"
 
 
 ortom_id = 146297737
+god_party = [378922227, 169026012, 135224919]
 
 # Для Long Poll
 vk_session = VkApi(token=token)
 
 # Для использоания Long Poll API
-longpoll = VkBotLongPoll(vk_session, group_id, wait=30)
+longpoll = VkBotLongPoll(vk_session, group_id, wait=10)
 
 # Для загрузки фото и других мультимедиа в сообщения
 upload = VkUpload(vk_session)
@@ -33,18 +34,20 @@ greeted = {}
 
 """
  Идея в том, что мы будем записывать ивенты для каждого отдельного пользователя 
- в словарь.
- В словаре имеется структура {id: [время ласт запроса:int, [ивент, ивент, ивент...]]}
+ в словарь. По одной штуке на пользователся (последний)
+ В словаре имеется структура {id: [время ласт запроса:int, [доп. данные, ивент]]}
  По сообщению "Спасибо" массив очищается для отдельного пользователя И для пользователя,
   вызывавшего ту-же предпоследнюю команду (до Спасибо) 
-  Значения в events_of_users[sender_id][1]:
+  Значения в events_of_users[sender_id][1][1]:
    "q" - вопрос
    "h" - приветствие
    "s" - перестрелка !!! Результат сохраняется в формате [победивший, проигравший] предыдущим элементом перед "s" !!!
    "w" - погода
+   "a" - аниме
    "r" - /roll !!! Значение /roll сохраняется предыдущим элементом перед "r" !!!
    "d" - /diceroll !!! Значение /diceroll сохраняется предыдущим элементом перед "d" !!!
    "f" - /flip !!! Значение /flip сохраняется предыдущим элементом перед "f" !!!
+   "rasp" - Расписание
   
 """
 
@@ -101,43 +104,68 @@ def send_photo_tochat(chat_id, path_to_photo=None, attachment=None):
                     {"chat_id": chat_id, "message": "", "attachment": attachment, "random_id": random.randint(0, 2048)})
 
 
+def audio_msg(audio_msg):
+    return
+
 def parse_msg(event):
+    try:
+        msg_audio = event.message['attachments'][0]['audio_message']['link_mp3']
+        # print(event.message)
+        print(msg_audio)
+        audio_msg(audio_msg)
+        return
+    except BaseException:
+        pass
+
     msg_text = event.message['text'].lower()
     chat_id = event.chat_id
     sender_id = event.message['from_id']
 
-    if (sender_id not in events_of_users.keys()):
-        events_of_users[sender_id] = [time(), [None]]
-
-    if (time() - events_of_users[sender_id][0] > 600):
-        events_of_users[sender_id] = [time(), [None]]
-
+    if (sender_id not in events_of_users.keys()) or (time() - events_of_users[sender_id][0] > 300):
+        events_of_users[sender_id] = [time(), [None, None]]
 
     if "help" in msg_text or "команды" in msg_text:
         send_msg_tochat(chat_id, list_commands.get_commands())
 
     if 'перестрелка' in msg_text and '|' in msg_text:
-        events_of_users[sender_id][0] = time()
-        result = skirmish.skirmsh(vk_session, sender_id, int(msg_text.split('|')[0].split('[')[1][2:]))
-        send_msg_tochat(chat_id, result[0])
-        events_of_users[sender_id][1] = [result[1], 's']
+        try:
+            result = skirmish.skirmish(vk_session, sender_id, int(msg_text.split('|')[0].split('[')[1][2:]))
+
+            send_msg_tochat(chat_id, result[0])
+
+            events_of_users[sender_id][0] = time()
+            events_of_users[sender_id][1] = [result[1], 's']
+
+        except BaseException:
+            send_msg_tochat(chat_id, "Ты по кому стрелаешь, ТЫ по кому стреляешь, АЛО?")
+
 
     elif 'погода' in msg_text or 'погоду' in msg_text:
+
         events_of_users[sender_id][0] = time()
-        events_of_users[sender_id][1] = ['w']
+
         if 'завтра' in msg_text:
-            send_msg_tochat(chat_id, weather.weather_tm())
+            result = weather.weather(True)
+            send_msg_tochat(chat_id, result[0])
+            events_of_users[sender_id][1] = [result[1], 'w']
+
         else:
-            send_msg_tochat(chat_id, weather.weather_td())
+            result = weather.weather()
+            send_msg_tochat(chat_id, result[0])
+            events_of_users[sender_id][1] = [result[1], 'w']
 
     elif 'расписание' in msg_text:
+
         events_of_users[sender_id][0] = time()
-        events_of_users[sender_id][1].append('q')
+        events_of_users[sender_id][1] = [None, 'rasp']
+
         send_photo_tochat(chat_id, attachment=schedule.schedule())
 
     elif 'неделя' in msg_text and 'какая' in msg_text:
+
         events_of_users[sender_id][0] = time()
-        events_of_users[sender_id][1].append('q')
+        events_of_users[sender_id][1] = [None, 'q']
+
         send_msg_tochat(chat_id, how_week.how_week())
 
     #elif 'автобус' in msg_text or 'автобуса' in msg_text:
@@ -146,44 +174,77 @@ def parse_msg(event):
 
     elif (('хуета' in msg_text) or ('хуита' in msg_text)) and ('я' not in msg_text):
         send_msg_tochat(chat_id, 'Сам ты хуита понял? М? М? М?')
+
     elif 'тыква' in msg_text:
         send_msg_tochat(chat_id, 'А может ты ква??????!! Не понял')
-    elif 'спасибо' in msg_text:
-        send_msg_tochat(chat_id, 'Если чем-то помог, то пожалуйста:3' if random.randint(1, 5) > 1 else 'Иди нахуй')
+
     elif ('привет' in msg_text or 'здравствуй' in msg_text) and ('сладкий' in msg_text or 'бот' in msg_text) and \
-                    ((time() - greeted[sender_id]) > 6000 if sender_id in greeted.keys() else True):
+            ((time() - greeted[sender_id]) > 6000 if sender_id in greeted.keys() else True):
+
+        events_of_users[sender_id][0] = time()
         greeted[sender_id] = time()
-        if sender_id == ortom_id:
-            hello = greet.ortom_hello()
-        else:
-            hello = greet.hello()
+
+        hello = greet.ortom_hello() if sender_id == ortom_id else greet.hello()
+
         send_msg_tochat(chat_id,
                         hello.format(
                             vk_session.method('users.get', {'user_ids': sender_id})[0]['first_name'])
                         )
     elif 'аниме' in msg_text:
         send_msg_tochat(chat_id, myanimelist.get_top())
+
+        events_of_users[sender_id][0] = time()
+        events_of_users[sender_id][1] = [None, 'a']
+
     elif 'секс' in msg_text:
         send_msg_tochat(chat_id, 'Ты тоже секс')
+
     elif '/' in msg_text:
+
         if 'roll' in msg_text:
-            send_msg_tochat(chat_id, diceroll.roll(vk_session, sender_id, msg_text))
+            result = diceroll.roll(vk_session, sender_id, msg_text)
+            send_msg_tochat(chat_id, result[0])
+
+            events_of_users[sender_id][0] = time()
+            events_of_users[sender_id][1] = [result[1], 'r']
+
         elif 'dice' in msg_text:
-            send_msg_tochat(chat_id, diceroll.diceroll(vk_session, sender_id))
+            result = diceroll.diceroll(vk_session, sender_id)
+            send_msg_tochat(chat_id, result[0])
+
+            events_of_users[sender_id][0] = time()
+            events_of_users[sender_id][1] = [result[1], 'd']
+
         elif 'flip' in msg_text:
-            send_msg_tochat(chat_id, diceroll.flip(vk_session, sender_id))
+            result = diceroll.flip(vk_session, sender_id)
+            send_msg_tochat(chat_id, result[0])
+
+            events_of_users[sender_id][0] = time()
+            events_of_users[sender_id][1] = [result[1], 'f']
+
+        elif 'punish' in msg_text:
+            try:
+                enemy_id = int(msg_text.split('|')[0].split('[')[1][2:])
+            except BaseException:
+                pass
+            if sender_id in god_party:
+                    send_msg_tochat(1, 'Пососи, {0} @id{1}({2})'.format(
+                        ("собакоподобная пакость, не становись ортомом," if vk_session.method('users.get', {'user_ids': enemy_id, 'fields': 'sex'})[0]['sex'] == 1
+                         else "попущенный под столиком, грязный пасынок собаки"), enemy_id, vk_session.method('users.get', {'user_ids': enemy_id})[0]['first_name']))
+            else:
+                    send_msg_tochat(1, '{0} {1}'.format(vk_session.method('users.get',
+                    {'user_ids': sender_id})[0]['first_name'], "попыталась отлизать сама у себя, но обосралась"
+                    if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1  else "попытался отсосать сам у себя, но обосрался"))
 
 
-def record_queue_event(queue_event,add_event,len_queue):
-    """
-    :param queue_event: очередь, в которую добавляются event'ы
-    :param add_event: добавляемый event
-    :param len_queue: длина желаемой очереди, например 10. В таком случая если в очереди уже есть 10 элементов,то самый последний удалиться,тем самым освободив место
-    :return:
-    """
-    if len(queue_event) == len_queue:
-        del queue_event[0]
-    queue_event.append(add_event)
+    elif 'спасибо' in msg_text:
+        if events_of_users[sender_id][1][1]:
+            send_msg_tochat(chat_id, thanks_react.react(vk_session, sender_id,
+                                                    events_of_users[sender_id][1][1], events_of_users[sender_id][1][0]))
+        else:
+            send_msg_tochat(chat_id, "Не за что, {0}".format(
+                'Дорогая' if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1 else "Дорогой"))
+        events_of_users[sender_id] = [time(), [None, None]]
 
 
 def main():
