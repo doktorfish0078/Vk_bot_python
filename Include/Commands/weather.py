@@ -23,7 +23,7 @@ def weather(tomorrow = False):
                 if day * 3 + 1 == i:
                     timeday[day] += '...'
                 elif day * 3 + 2 == i:
-                    timeday[day] += ' ощущается как '
+                    timeday[day] += ', ощущается как '
                 timeday[day] += temp[i].text + 'ºC'
             out_weather[0] += timeday[day] + '\n'
         return out_weather
