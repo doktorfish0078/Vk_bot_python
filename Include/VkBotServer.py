@@ -103,7 +103,19 @@ def send_photo_tochat(chat_id, path_to_photo=None, attachment=None):
                     {"chat_id": chat_id, "message": "", "attachment": attachment, "random_id": random.randint(0, 2048)})
 
 
+def audio_msg(audio_msg):
+    return
+
 def parse_msg(event):
+    try:
+        msg_audio = event.message['attachments'][0]['audio_message']['link_mp3']
+        # print(event.message)
+        print(msg_audio)
+        audio_msg(audio_msg)
+        return
+    except BaseException:
+        pass
+
     msg_text = event.message['text'].lower()
     chat_id = event.chat_id
     sender_id = event.message['from_id']
