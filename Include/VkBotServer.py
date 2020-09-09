@@ -107,7 +107,6 @@ def parse_msg(event):
     msg_text = event.message['text'].lower()
     chat_id = event.chat_id
     sender_id = event.message['from_id']
-    print(chat_id)
 
     if (sender_id not in events_of_users.keys()) or (time() - events_of_users[sender_id][0] > 300):
         events_of_users[sender_id] = [time(), [None, None]]
@@ -241,7 +240,6 @@ def main():
     :return:
     """
     print("Бот приступил к работе")
-    #queue_event = []
     for event in longpoll.listen(): # Слушаем сервер
         if event.type == VkBotEventType.MESSAGE_NEW:
             print("Получено сообщение")
