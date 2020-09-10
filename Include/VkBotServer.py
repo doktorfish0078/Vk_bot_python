@@ -124,10 +124,10 @@ def parse_msg(event):
     if (sender_id not in events_of_users.keys()) or (time() - events_of_users[sender_id][0] > 300):
         events_of_users[sender_id] = [time(), [None, None]]
 
-    if "/help" in msg_text or "/команды" in msg_text:
+    if "help" in msg_text or "команды" in msg_text:
         send_msg_tochat(chat_id, list_commands.get_commands())
 
-    if (('/перестрелка' in msg_text) or ('/skirmish' in msg_text)) and '|' in msg_text:
+    if 'перестрелка' in msg_text and '|' in msg_text:
         try:
             result = skirmish.skirmish(vk_session, sender_id, int(msg_text.split('|')[0].split('[')[1][2:]))
 
@@ -140,7 +140,7 @@ def parse_msg(event):
             send_msg_tochat(chat_id, "Ты по кому стрелаешь, ТЫ по кому стреляешь, АЛО?")
 
 
-    elif '/погода' in msg_text or '/weather' in msg_text:
+    elif 'погода' in msg_text or 'погоду' in msg_text:
 
         events_of_users[sender_id][0] = time()
 
@@ -154,14 +154,14 @@ def parse_msg(event):
             send_msg_tochat(chat_id, result[0])
             events_of_users[sender_id][1] = [result[1], 'w']
 
-    elif ('/расписание' in msg_text) or ('/schedule' in msg_text):
+    elif 'расписание' in msg_text:
 
         events_of_users[sender_id][0] = time()
         events_of_users[sender_id][1] = [None, 'rasp']
 
         send_photo_tochat(chat_id, attachment=schedule.schedule())
 
-    elif (('/неделя' in msg_text) or ('/week' in msg_text)) and 'какая' in msg_text:
+    elif 'неделя' in msg_text and 'какая' in msg_text:
 
         events_of_users[sender_id][0] = time()
         events_of_users[sender_id][1] = [None, 'q']
@@ -178,7 +178,7 @@ def parse_msg(event):
     elif 'тыква' in msg_text:
         send_msg_tochat(chat_id, 'А может ты ква??????!! Не понял')
 
-    elif ('/привет' in msg_text or '/здравствуй' in msg_text) and ('сладкий' in msg_text or 'бот' in msg_text) and \
+    elif ('привет' in msg_text or 'здравствуй' in msg_text) and ('сладкий' in msg_text or 'бот' in msg_text) and \
             ((time() - greeted[sender_id]) > 6000 if sender_id in greeted.keys() else True):
 
         events_of_users[sender_id][0] = time()
@@ -190,55 +190,56 @@ def parse_msg(event):
                         hello.format(
                             vk_session.method('users.get', {'user_ids': sender_id})[0]['first_name'])
                         )
-    elif '/аниме' in msg_text:
+    elif 'аниме' in msg_text:
         send_msg_tochat(chat_id, myanimelist.get_top())
 
         events_of_users[sender_id][0] = time()
         events_of_users[sender_id][1] = [None, 'a']
 
-    elif '/секс' in msg_text:
+    elif 'секс' in msg_text:
         send_msg_tochat(chat_id, 'Ты тоже секс')
 
+    elif '/' in msg_text:
 
-    if '/roll' in msg_text:
-        result = diceroll.roll(vk_session, sender_id, msg_text)
-        send_msg_tochat(chat_id, result[0])
+        if 'roll' in msg_text:
+            result = diceroll.roll(vk_session, sender_id, msg_text)
+            send_msg_tochat(chat_id, result[0])
 
-        events_of_users[sender_id][0] = time()
-        events_of_users[sender_id][1] = [result[1], 'r']
+            events_of_users[sender_id][0] = time()
+            events_of_users[sender_id][1] = [result[1], 'r']
 
-    elif '/dice' in msg_text:
-        result = diceroll.diceroll(vk_session, sender_id)
-        send_msg_tochat(chat_id, result[0])
+        elif 'dice' in msg_text:
+            result = diceroll.diceroll(vk_session, sender_id)
+            send_msg_tochat(chat_id, result[0])
 
-        events_of_users[sender_id][0] = time()
-        events_of_users[sender_id][1] = [result[1], 'd']
+            events_of_users[sender_id][0] = time()
+            events_of_users[sender_id][1] = [result[1], 'd']
 
-    elif '/flip' in msg_text:
-        result = diceroll.flip(vk_session, sender_id)
-        send_msg_tochat(chat_id, result[0])
+        elif 'flip' in msg_text:
+            result = diceroll.flip(vk_session, sender_id)
+            send_msg_tochat(chat_id, result[0])
 
-        events_of_users[sender_id][0] = time()
-        events_of_users[sender_id][1] = [result[1], 'f']
+            events_of_users[sender_id][0] = time()
+            events_of_users[sender_id][1] = [result[1], 'f']
 
 
-    elif '/punish' in msg_text:
-        try:
-            enemy_id = int(msg_text.split('|')[0].split('[')[1][2:])
-        except BaseException:
-            pass
-        if sender_id in god_party:
-                send_msg_tochat(1, 'Пососи, {0} @id{1}({2})'.format(
-                    ("собакоподобная пакость, не становись ортомом," if vk_session.method('users.get', {'user_ids': enemy_id, 'fields': 'sex'})[0]['sex'] == 1
-                     else "попущенный под столиком, грязный пасынок собаки"), enemy_id, vk_session.method('users.get', {'user_ids': enemy_id})[0]['first_name']))
-        else:
-                send_msg_tochat(1, '{0} {1}'.format(vk_session.method('users.get',
-                {'user_ids': sender_id})[0]['first_name'], "попыталась отлизать сама у себя, но обосралась"
-                if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1  else "попытался отсосать сам у себя, но обосрался"))
-    elif '/вики' in msg_text or '/википедия' in msg_text:
-        send_msg_tochat(chat_id, test_wiki.wiki_searching(msg_text))
+        elif 'punish' in msg_text:
+            try:
+                enemy_id = int(msg_text.split('|')[0].split('[')[1][2:])
+            except BaseException:
+                pass
+            if sender_id in god_party:
+                    send_msg_tochat(1, 'Пососи, {0} @id{1}({2})'.format(
+                        ("собакоподобная пакость, не становись ортомом," if vk_session.method('users.get', {'user_ids': enemy_id, 'fields': 'sex'})[0]['sex'] == 1
+                         else "попущенный под столиком, грязный пасынок собаки"), enemy_id, vk_session.method('users.get', {'user_ids': enemy_id})[0]['first_name']))
+            else:
+                    send_msg_tochat(1, '{0} {1}'.format(vk_session.method('users.get',
+                    {'user_ids': sender_id})[0]['first_name'], "попыталась отлизать сама у себя, но обосралась"
+                    if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1  else "попытался отсосать сам у себя, но обосрался"))
+        elif 'вики' in msg_text or 'википедия' in msg_text:
+            send_msg_tochat(chat_id, test_wiki.wiki_searching(msg_text))
 
-    elif '/спасибо' in msg_text:
+    elif 'спасибо' in msg_text:
         if events_of_users[sender_id][1][1]:
             send_msg_tochat(chat_id, thanks_react.react(vk_session, sender_id,
                                                     events_of_users[sender_id][1][1], events_of_users[sender_id][1][0]))
@@ -258,8 +259,7 @@ def main():
         if event.type == VkBotEventType.MESSAGE_NEW:
             print("Получено сообщение")
             if event.from_chat: # Обработка сообщений из чата
-                if '/' == event.message['text'][0]:
-                    parse_msg(event)
+                parse_msg(event)
             elif event.from_user:
                 pass
                 """ 
