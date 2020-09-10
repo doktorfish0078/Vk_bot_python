@@ -28,7 +28,7 @@ longpoll = VkBotLongPoll(vk_session, group_id, wait=10)
 upload = VkUpload(vk_session)
 
 # Для вызова методов vk_api
-#vk_api = vk_session.get_api()
+vk_api = vk_session.get_api()
 
 greeted = {}
 
@@ -104,18 +104,17 @@ def send_photo_tochat(chat_id, path_to_photo=None, attachment=None):
                     {"chat_id": chat_id, "message": "", "attachment": attachment, "random_id": random.randint(0, 2048)})
 
 
-def audio_msg(audio_msg):
+def parse_audio_msg(event):
+    # msg_audio = event.message['attachments'][0]['audio_message']['link_mp3']
+    # buf = \
+    #     vk_api.messages.getByConversationMessageId(
+    #         event.message['peer_id'], event.message['conversation_message_id'], 0)
+    # print(event.message)
+    # print(buf)
+    # print(msg_audio)
     return
 
 def parse_msg(event):
-    try:
-        msg_audio = event.message['attachments'][0]['audio_message']['link_mp3']
-        # print(event.message)
-        print(msg_audio)
-        audio_msg(audio_msg)
-        return
-    except BaseException:
-        pass
 
     msg_text = event.message['text'].lower()
     chat_id = event.chat_id
@@ -256,8 +255,11 @@ def main():
         if event.type == VkBotEventType.MESSAGE_NEW:
             print("Получено сообщение")
             if event.from_chat: # Обработка сообщений из чата
-                if '/' == event.message['text'][0]:
-                    parse_msg(event)
+                if len(event.message['attachments']) == 0:
+                    if '@@@' == event.message['text'][0]:
+                        parse_msg(event)
+                elif event.message['attachments'][0]['type'] == 'audio_message':
+                    parse_audio_msg(event)
             elif event.from_user:
                 pass
                 """ 
