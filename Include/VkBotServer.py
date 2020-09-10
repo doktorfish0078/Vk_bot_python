@@ -279,7 +279,7 @@ def main():
             print("Получено сообщение")
             if event.from_chat:  # Обработка сообщений из чата
                 if len(event.message['attachments']) == 0:
-                    if '@@@' == event.message['text'][0]:
+                    if '/' == event.message['text'][0]:
                         parse_msg(event)
                 elif event.message['attachments'][0]['type'] == 'audio_message':
                     parse_audio_msg(event)
