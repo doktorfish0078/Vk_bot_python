@@ -1,2 +1,4 @@
-a = 'a b c    d'
-print(a.find(' ', 5))
+a = ['a', 'b', 'c']
+
+if 'd' or 'c' in a:
+    print(a)
