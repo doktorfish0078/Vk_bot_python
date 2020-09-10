@@ -238,14 +238,12 @@ def parse_msg(event):
     elif '/вики' in msg_text or '/википедия' in msg_text:
         send_msg_tochat(chat_id, test_wiki.wiki_searching(msg_text))
 
-    elif '/спасибо' in msg_text:
+    elif 'спасибо' in msg_text:
         if events_of_users[sender_id][1][1]:
             send_msg_tochat(chat_id, thanks_react.react(vk_session, sender_id,
                                                     events_of_users[sender_id][1][1], events_of_users[sender_id][1][0]))
         else:
-            send_msg_tochat(chat_id, "Не за что, {0}".format(
-                'Дорогая' if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1 else "Дорогой"))
-        events_of_users[sender_id] = [time(), [None, None]]
+            pass
 
 
 def main():
