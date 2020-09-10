@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-# from Vk_bot_python.Include.Commands import thanks_react
+from Vk_bot_python.Include.Commands import thanks_react
 def weather(tomorrow = False):
     timeday = ['Утром ', 'Днём ', 'Вечером ', 'Ночью ']
     numb_card_for_parsing = 0
