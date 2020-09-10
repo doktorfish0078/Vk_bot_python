@@ -3,7 +3,7 @@
 
 import random
 
-from Commands import weather, schedule, skirmish, myanimelist,\
+from Commands import weather, schedule, skirmish, myanimelist, \
     how_week, schedule_bus, list_commands, diceroll, greet, thanks_react, test_wiki
 
 from vk_api import VkApi, VkUpload
@@ -12,8 +12,7 @@ from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 from time import time
 
 token = "ee5ee2a15eae712b0b63dd92847a7a06cc9e5e0b4014d430b7fdde83897d9cd9cea7978a0754aae391607"
-group_id = "186084635"
-
+group_id = 186084635
 
 ortom_id = 146297737
 god_party = [378922227, 169026012, 101014447, 135224919]
@@ -28,7 +27,7 @@ longpoll = VkBotLongPoll(vk_session, group_id, wait=10)
 upload = VkUpload(vk_session)
 
 # Для вызова методов vk_api
-vk_api = vk_session.get_api()
+# vk_api = vk_session.get_api()
 
 greeted = {}
 
@@ -48,7 +47,7 @@ greeted = {}
    "d" - /diceroll !!! Значение /diceroll сохраняется предыдущим элементом перед "d" !!!
    "f" - /flip !!! Значение /flip сохраняется предыдущим элементом перед "f" !!!
    "rasp" - Расписание
-  
+
 """
 
 events_of_users = {}
@@ -73,7 +72,7 @@ def send_msg_touser(user_id, message):
     :return: None
     """
     vk_session.method('messages.send',
-                           {'user_id': user_id, 'message': message, 'random_id': random.randint(0, 2048)})
+                      {'user_id': user_id, 'message': message, 'random_id': random.randint(0, 2048)})
 
 
 def send_photo_fromVK_tochat(chat_id, attachment):
@@ -83,7 +82,8 @@ def send_photo_fromVK_tochat(chat_id, attachment):
     :return:
     """
     vk_session.method("messages.send",
-              {"chat_id": chat_id, "message": "", "attachment": attachment, "random_id": random.randint(0, 2048)})
+                      {"chat_id": chat_id, "message": "", "attachment": attachment,
+                       "random_id": random.randint(0, 2048)})
 
 
 def send_photo_tochat(chat_id, path_to_photo=None, attachment=None):
@@ -99,23 +99,41 @@ def send_photo_tochat(chat_id, path_to_photo=None, attachment=None):
     """
     if path_to_photo:
         photo = upload.photo_messages(path_to_photo)
-        attachment = "photo" + (str)(photo[0]['owner_id']) + "_" + (str)(photo[0]['id']) + "_" + (str)(photo[0]['access_key'])
+        attachment = "photo" + (str)(photo[0]['owner_id']) + "_" + (str)(photo[0]['id']) + "_" + (str)(
+            photo[0]['access_key'])
     vk_session.method("messages.send",
-                    {"chat_id": chat_id, "message": "", "attachment": attachment, "random_id": random.randint(0, 2048)})
+                      {"chat_id": chat_id, "message": "", "attachment": attachment,
+                       "random_id": random.randint(0, 2048)})
+
+
+def audio_msg_info(msg_audio):
+    # print(msg_audio['peer_id'])
+    # print(msg_audio['conversation_message_id'])
+    # print(group_id)
+    return vk_session.method("messages.getByConversationMessageId",
+                             {"peer_id": msg_audio["peer_id"],
+                              "conversation_message_ids": msg_audio["conversation_message_id"],
+                              "group_id": group_id})
+    # return vk_api.messages.getByConversationMessageId(
+    #     {"peer_id": msg_audio['peer_id'],
+    #      "conversation_message_ids": msg_audio['conversation_message_id'],
+    #      "group_id": group_id})
+
 
 
 def parse_audio_msg(event):
-    # msg_audio = event.message['attachments'][0]['audio_message']['link_mp3']
-    # buf = \
-    #     vk_api.messages.getByConversationMessageId(
-    #         event.message['peer_id'], event.message['conversation_message_id'], 0)
-    # print(event.message)
-    # print(buf)
-    # print(msg_audio)
+    msg_audio = event.message
+    # ['attachments'][0]['audio_message']['link_mp3']
+    print(msg_audio)
+    current_state = audio_msg_info(msg_audio)
+    print(current_state)
+    if current_state['count'] > 0:
+        while 'transcript_state' in current_state['attachments'][0].keys:
+            current_state = audio_msg_info(msg_audio)
     return
 
-def parse_msg(event):
 
+def parse_msg(event):
     msg_text = event.message['text'].lower()
     chat_id = event.chat_id
     sender_id = event.message['from_id']
@@ -167,9 +185,9 @@ def parse_msg(event):
 
         send_msg_tochat(chat_id, how_week.how_week())
 
-    #elif 'автобус' in msg_text or 'автобуса' in msg_text:
-        #send_msg_tochat(chat_id, "Ищу где Ваш автобус,подождите немного...")
-        #send_photo_tochat(chat_id, path_to_photo=schedule_bus.get_path_schedule_bus(msg_text))
+    # elif 'автобус' in msg_text or 'автобуса' in msg_text:
+    # send_msg_tochat(chat_id, "Ищу где Ваш автобус,подождите немного...")
+    # send_photo_tochat(chat_id, path_to_photo=schedule_bus.get_path_schedule_bus(msg_text))
 
     elif (('хуета' in msg_text) or ('хуита' in msg_text)) and ('я' not in msg_text):
         send_msg_tochat(chat_id, 'Сам ты хуита понял? М? М? М?')
@@ -197,7 +215,6 @@ def parse_msg(event):
 
     elif '/секс' in msg_text:
         send_msg_tochat(chat_id, 'Ты тоже секс')
-
 
     if '/roll' in msg_text:
         result = diceroll.roll(vk_session, sender_id, msg_text)
@@ -227,20 +244,26 @@ def parse_msg(event):
         except BaseException:
             pass
         if sender_id in god_party:
-                send_msg_tochat(1, 'Пососи, {0} @id{1}({2})'.format(
-                    ("собакоподобная пакость, не становись ортомом," if vk_session.method('users.get', {'user_ids': enemy_id, 'fields': 'sex'})[0]['sex'] == 1
-                     else "попущенный под столиком, грязный пасынок собаки"), enemy_id, vk_session.method('users.get', {'user_ids': enemy_id})[0]['first_name']))
+            send_msg_tochat(1, 'Пососи, {0} @id{1}({2})'.format(
+                ("собакоподобная пакость, не становись ортомом," if
+                 vk_session.method('users.get', {'user_ids': enemy_id, 'fields': 'sex'})[0]['sex'] == 1
+                 else "попущенный под столиком, грязный пасынок собаки"), enemy_id,
+                vk_session.method('users.get', {'user_ids': enemy_id})[0]['first_name']))
         else:
-                send_msg_tochat(1, '{0} {1}'.format(vk_session.method('users.get',
-                {'user_ids': sender_id})[0]['first_name'], "попыталась отлизать сама у себя, но обосралась"
-                if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1  else "попытался отсосать сам у себя, но обосрался"))
+            send_msg_tochat(1, '{0} {1}'.format(vk_session.method('users.get',
+                                                                  {'user_ids': sender_id})[0]['first_name'],
+                                                "попыталась отлизать сама у себя, но обосралась"
+                                                if vk_session.method('users.get',
+                                                                     {'user_ids': sender_id, 'fields': 'sex'})[0][
+                                                       'sex'] == 1 else "попытался отсосать сам у себя, но обосрался"))
     elif '/вики' in msg_text or '/википедия' in msg_text:
         send_msg_tochat(chat_id, test_wiki.wiki_searching(msg_text))
 
     elif 'спасибо' in msg_text:
         if events_of_users[sender_id][1][1]:
             send_msg_tochat(chat_id, thanks_react.react(vk_session, sender_id,
-                                                    events_of_users[sender_id][1][1], events_of_users[sender_id][1][0]))
+                                                        events_of_users[sender_id][1][1],
+                                                        events_of_users[sender_id][1][0]))
         else:
             pass
 
@@ -251,10 +274,10 @@ def main():
     :return:
     """
     print("Бот приступил к работе")
-    for event in longpoll.listen(): # Слушаем сервер
+    for event in longpoll.listen():  # Слушаем сервер
         if event.type == VkBotEventType.MESSAGE_NEW:
             print("Получено сообщение")
-            if event.from_chat: # Обработка сообщений из чата
+            if event.from_chat:  # Обработка сообщений из чата
                 if len(event.message['attachments']) == 0:
                     if '@@@' == event.message['text'][0]:
                         parse_msg(event)
@@ -267,6 +290,7 @@ def main():
                     >Обработка личных сообщений
                 """
                 # send_msg_touser(event.message['from_id'], input(event.message['text']))
+
 
 if __name__ == '__main__':
     main()
