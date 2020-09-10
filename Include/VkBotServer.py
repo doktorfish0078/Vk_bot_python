@@ -16,7 +16,7 @@ group_id = "186084635"
 
 
 ortom_id = 146297737
-god_party = [378922227, 169026012, 135224919]
+god_party = [378922227, 169026012, 101014447, 135224919]
 
 # Для Long Poll
 vk_session = VkApi(token=token)
