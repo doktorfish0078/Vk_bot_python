@@ -4,7 +4,7 @@
 import random
 
 from Commands import weather, schedule, skirmish, myanimelist,\
-    how_week, schedule_bus, list_commands, diceroll, greet, thanks_react, test_wiki
+    how_week, schedule_bus, list_commands, diceroll, greet, thanks_react, test_wiki, test_films
 
 from vk_api import VkApi, VkUpload
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -238,6 +238,10 @@ def parse_msg(event):
                     if vk_session.method('users.get', {'user_ids': sender_id, 'fields': 'sex'})[0]['sex'] == 1  else "попытался отсосать сам у себя, но обосрался"))
         elif 'вики' in msg_text or 'википедия' in msg_text:
             send_msg_tochat(chat_id, test_wiki.wiki_searching(msg_text))
+        elif 'фильм' in msg_text or 'кино' in msg_text:
+            send_msg_tochat(chat_id, test_films.get_films())
+
+
 
     elif 'спасибо' in msg_text:
         if events_of_users[sender_id][1][1]:
