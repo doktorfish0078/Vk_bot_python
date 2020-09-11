@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-import weather, schedule, skirmish, myanimelist, \
+from Commands import weather, schedule, skirmish, myanimelist, \
     how_week, list_commands, diceroll, greet, thanks_react
 
 from vk_api import VkApi
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
 import parse_comands, send_msg
+from common_finder import find_common
 
 from sys import exit
 from re import split
@@ -14,33 +15,33 @@ from time import time
 # "ee5ee2a15eae712b0b63dd92847a7a06cc9e5e0b4014d430b7fdde83897d9cd9cea7978a0754aae391607"
 # 186084635
 
-global vk_session
-
 token = 'ee5ee2a15eae712b0b63dd92847a7a06cc9e5e0b4014d430b7fdde83897d9cd9cea7978a0754aae391607'
-group_id = ''
+group_id = '186084635'
 
 gods = []
 low_rank = []
 
 users = {}
 
-with open('params.txt', 'r') as parameters:
-    pass
+# with open('params.txt', 'r') as parameters:
+#     pass
 
 
 class Users:
 
-    def __init__(self):
+    def __init__(self, sender_id):
         self.greeted = 0
-        self.id = 0
+        self.id = sender_id
         self.last_use = None
         self.last_event = None
         self.last_result = None
 
     def under_parse_message(self, message):
+        message.lower()
 
         if message[0] == '/':
-            message = split("{[, /\|]}.?:;^%$#№<>()_=*&'"+'"', message[1:])
+            message = split("[\[\],/|}.?:;^%$#№<>()_=*&]+'", message[1:])
+            print(message)
             self.last_use = time()
         else:
             return None
@@ -52,25 +53,29 @@ class Users:
 
     def parse_slash(self, message):
         request = message[0]
+        answer = ''
 
-        if request == 'help' or 'команды':
+        if request in ['help', 'команды', 'помощь']:
             answer = list_commands.get_commands()
 
-        elif request == 'anime' or 'аниме':
+        elif request in ['anime', 'аниме']:
             self.last_event = 'a'
             answer = myanimelist.get_top()
             """
                 Пока оставил без входящих атрибутов, непонятно как работать должно просто))
             """
 
-        elif request == 'weather' or 'погода':
+        elif request in ['weather', 'погода']:
             self.last_event = 'w'
             if 'завтра' or 'tomorrow' in message:
-                answer, self.last_result = weather.weather(True)
+                answer, self.last_result = weather.weather(tomorrow = True)
+                print(answer, self.last_result)
             else:
                 answer, self.last_result = weather.weather()
 
-        # elif request == ''
+        # elif request in []:
+
+        send_msg.send_msg_tochat(vk_session, 2, answer)
 
 
 
@@ -78,30 +83,31 @@ class Users:
         pass
 
 
-
 def main():
+    global vk_session
     vk_session = VkApi(token=token)
     longpoll = VkBotLongPoll(vk_session, group_id, wait=10)
 
-    try:
-        for event in longpoll.listen():
+    # try:
+    print('Start')
+    for event in longpoll.listen():
 
-            if event.type == VkBotEventType.MESSAGE_NEW and event.from_chat:
+        if event.type == VkBotEventType.MESSAGE_NEW and event.from_chat:
 
-                sender = event.message['from_id']
+            sender = event.message['from_id']
 
-                if event.message['from_id'] not in users.keys():
-                    users[sender] = Users
+            if event.message['from_id'] not in users.keys():
+                users[sender] = Users(sender)
 
-                if event.message['attachments'] and event.message['attachments'][0]['type'] == 'audio_message':
-                        pass
+            if event.message['attachments'] and event.message['attachments'][0]['type'] == 'audio_message':
+                    pass
 
-                elif event.message['text']:
-                    users[sender].parse_messange(event.message['text'].lower)
-    except BaseException as error:
-        send_msg(vk_session, 1, error)
-    finally:
-        exit()
+            elif event.message['text']:
+                users[sender].under_parse_message(event.message['text'])
+    # except BaseException as error:
+    #     send_msg(vk_session, 1, error)
+    # finally:
+    #     exit()
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
-a = ['a', 'b', 'c']
-
-if 'd' or 'c' in a:
+a = 'я'
+b = 'g'
+c = 'k'
+if a == b or c:
     print(a)
