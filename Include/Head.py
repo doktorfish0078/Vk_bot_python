@@ -12,7 +12,6 @@ from sys import path
 from os import listdir
 
 from sys import exit
-import re
 from re import split
 from time import time
 
