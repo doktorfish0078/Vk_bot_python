@@ -33,10 +33,10 @@ users = {}
 Все последующие строки - id "богов", или тех, кто может раздавать mute или кидать punish
 """
 
-print(listdir(path[0]))
+print(path[0])
 
 try:
-    with open('params.txt', 'r') as parameters:
+    with open(path[0]+'/params.txt', 'r') as parameters:
         params = parameters.readlines()
         token = params[0].split('\n')[0]
         group_id = params[1].split('\n')[0]
