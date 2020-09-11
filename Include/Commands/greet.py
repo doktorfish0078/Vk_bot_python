@@ -8,8 +8,10 @@ def ortom_hello():
                        'Сука, опять ты, {0}? Мляяяяя']
     return ortom_hello_str[randint(0, len(ortom_hello_str) - 1)]
 
-def hello():
+def hello(vk_session, id):
     hello_str = ['Приветик, {0} ', 'Здравствуй, {0} ', 'Снова ты, {0}? ',
                  'Уже вернулись, {0}? ', 'Хо-хо, а я тебя не ждал, {0} ',
                  '{0}, какая встреча! ']
-    return hello_str[randint(0, len(hello_str) -1)] + smiles[randint(0, len(hello_str) -1)]
+    return hello_str[randint(0, len(hello_str) -1)] + smiles[randint(0, len(hello_str) -1)].format(
+        vk_session.method('users.get', {'user_ids': id})[0]['first_name']
+    )

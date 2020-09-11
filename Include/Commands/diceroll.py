@@ -13,9 +13,10 @@ def beautiful_num(num):
 
 
 def roll(vk_session, id, min=1, max=100):
-    min = 1
-    max = 100
-    result = str(randint(int(min), int(max)))
+    try:
+        result = str(randint(int(min), int(max)))
+    except BaseException:
+        result = str(randint(1, 100))
     return (
         "Случайное число  для @id{0}({1}) от {2} до {3} равняется {4}".format(
             id,

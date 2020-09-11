@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from Commands import weather, schedule, skirmish, myanimelist, \
-    how_week, list_commands, diceroll, greet, thanks_react
+    how_week, list_commands, diceroll, greet, thanks_react, test_wiki
 
 from vk_api import VkApi
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -27,7 +27,7 @@ users = {}
 #     pass
 
 
-class Users:
+class User:
 
     def __init__(self, sender_id):
         self.greeted = 0
@@ -41,16 +41,13 @@ class Users:
         message.lower()
 
         if message[0] == '/':
-            uncut = split(r"[\s/':;?,.<>()*&%$#!]", message[1:])
+            uncut = split(r"[\s/':;?,.<>()*&%$#!]+", message[1:])
             print(uncut)
             message = []
             for under_str in uncut:
                 if under_str: message.append(under_str)
-            self.last_use = time()
         else:
             return None
-
-
 
         if time() - self.greeted < 30:
             self.parse_no_slash(message)
@@ -96,11 +93,28 @@ class Users:
             answer, self.last_result = diceroll.flip(vk_session, self.id)
 
         elif request in ['roll', 'ролл']:
+            if len(message) > 3:
+                answer, self.last_result = diceroll.roll(vk_session, self.id, message[1], message[2])
+            else:
+                answer, self.last_result = diceroll.roll(vk_session, self.id)
+
+        elif request in ['вики', 'wiki', 'wikipedia']:
+            if len(message) > 1:
+                answer = test_wiki.wiki_searching(','.join(message[1:]))
+
+        elif request in []:
             pass
+
+        elif request in ['привет', "здравствуй", "хай", "hello", 'hi']:
+            if "бот" in request or 'bot' in request:
+                greet.hello(vk_session, self.id)
+                self.greeted = time()
+
 
 
         if answer:
-            send_msg.send_msg_tochat(vk_session, 2, answer)
+            self.last_use = time()
+            send_msg.send_msg_tochat(vk_session, self.current_chat, answer)
 
 
 
@@ -122,7 +136,7 @@ def main():
             sender = event.message['from_id']
 
             if event.message['from_id'] not in users.keys():
-                users[sender] = Users(sender)
+                users[sender] = User(sender)
 
             users[sender].current_chat = event.chat_id
 
