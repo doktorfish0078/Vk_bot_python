@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from Commands import weather, schedule, skirmish, myanimelist, \
-    how_week, list_commands, diceroll, greet, thanks_react, test_wiki, special
+    how_week, list_commands, diceroll, greet, thanks_react, test_wiki, special, \
+    test_films
 
 from vk_api import VkApi
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -31,6 +32,7 @@ class User:
 
     def __init__(self, sender_id):
         self.greeted = 0
+        self.slash_needed = True
         self.id = sender_id
         self.last_use = None
         self.current_chat = None
@@ -38,25 +40,25 @@ class User:
         self.last_result = None
 
     def under_parse_message(self, message):
-        message.lower()
+        message = message.lower()
         is_command = False
 
-        if message[0] == '/':
-            is_command == True
-            uncut = split(r"[\s/':;?,.<>()*&%$#!]+", message[1:])
-            print(uncut)
+        if message[0] == '/' or not self.slash_needed:
+            is_command = True
+            uncut = split(r"[\s/':;?,.<>()*&%$#!]+", message)
             message = []
             for under_str in uncut:
-                if under_str: message.append(under_str)
+                if under_str:
+                    message.append(under_str)
         else:
             return None
 
-        if time() - self.greeted < 30 and not is_command:
-            self.parse_no_slash(message)
-        else:
-            self.parse_slash(message)
+        print(message)
 
-    def parse_slash(self, message):
+        if is_command:
+            self.parse(message)
+
+    def parse(self, message):
         request = message[0]
         answer = ''
 
@@ -69,6 +71,9 @@ class User:
             """
                 Пока оставил без входящих атрибутов, непонятно как работать должно просто))
             """
+
+        elif request in ['cinema', 'film', 'films', 'кино']:
+            answer = test_films.get_films()
 
         elif request in ['weather', 'погода']:
             self.last_event = 'w'
@@ -96,7 +101,6 @@ class User:
 
         elif request in ['roll', 'ролл']:
             if len(message) >= 3:
-                print(message[1], message[2])
                 answer, self.last_result = diceroll.roll(vk_session, self.id, message[1], message[2])
             else:
                 answer, self.last_result = diceroll.roll(vk_session, self.id)
@@ -105,13 +109,14 @@ class User:
             if len(message) > 1:
                 answer = test_wiki.wiki_searching(','.join(message[1:]))
 
-        elif request in []:
-            pass
-
-        elif request in ['привет', "здравствуй", "хай", "hello", 'hi']:
+        elif request in ['привет', "здравствуй", "хай", "hello", 'hi'] and time() - self.greeted > 600:
             if "бот" in request or 'bot' in request:
                 greet.hello(vk_session, self.id)
                 self.greeted = time()
+
+        elif request in ['slash']:
+            self.slash_needed = not self.slash_needed
+            answer = 'Slash needed: {0}'.format('Yes' if self.slash_needed else 'No')
 
         elif self.id in gods:
             if request in ['punish', 'наказать', "наказание"]:
@@ -124,11 +129,6 @@ class User:
         if answer:
             self.last_use = time()
             send_msg.send_msg_tochat(vk_session, self.current_chat, answer)
-
-
-
-    def parse_no_slash(self, message):
-        pass
 
 
 def main():

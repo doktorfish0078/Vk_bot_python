@@ -1,3 +1,4 @@
-a = ''
+a = True
+a *= -1
 
-print(a if a else 4)
+print(str(a) + ' lkdaf')
