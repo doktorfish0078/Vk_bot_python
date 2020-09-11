@@ -40,7 +40,7 @@ try:
         for god in params[2:]:
             gods.append(int(god.split('\n')[0]))
 
-except (FileNotFoundError, IndexError):
+except FileNotFoundError:
     print('Не найден файл с параметрами "params.txt"!')
     exit()
 
@@ -131,6 +131,17 @@ class User:
                 greet.hello(vk_session, self.id)
                 self.greeted = time()
 
+        elif request in ['skirmish', 'перестрелка', "🔫", 'bang', 'маслина']:
+            if len(message) >= 2:
+                try:
+                    second_warrior = message[1].split('|')[0][3:]
+                    answer, self.last_result = skirmish.skirmish(vk_session, self.id, second_warrior)
+                except BaseException:
+                    answer = ''
+            else:
+                answer = 'А по кому стрелять то? По воробьям? Победили воробьи'
+
+
         elif request in ['slash']:
             self.slash_needed = not self.slash_needed
             answer = 'Slash needed: {0}'.format('Yes' if self.slash_needed else 'No')
@@ -138,7 +149,7 @@ class User:
         elif self.id in gods:
             if request in ['punish', 'наказать', "наказание"]:
                  if len(message) > 1:
-                    send_msg.send_msg_tochat(vk_session, message[2] if len(message)>2 else 1, special.punish(vk_session, message[1]))
+                    send_msg.send_msg_tochat(vk_session, message[2] if len(message)>2 else 1, special.punish(vk_session, message[1].split('|')[0][3:]))
 
             if request in ['shutdown']:
                 exit()
