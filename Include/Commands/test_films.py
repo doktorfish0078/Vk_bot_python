@@ -32,5 +32,3 @@ def get_films():
         return "\n".join(films)
     except BaseException:
         return "Не удалось получить фильмы :("
-
-print(get_films())
