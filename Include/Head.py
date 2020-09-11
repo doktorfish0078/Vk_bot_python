@@ -96,7 +96,7 @@ class User:
 
         elif request in ['weather', 'погода']:
             self.last_event = 'w'
-            if 'завтра' or 'tomorrow' in message:
+            if 'завтра' in message or 'tomorrow' in message:
                 answer, self.last_result = weather.weather(tomorrow = True)
             else:
                 answer, self.last_result = weather.weather()
