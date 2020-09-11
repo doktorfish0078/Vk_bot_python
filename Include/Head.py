@@ -33,8 +33,6 @@ users = {}
 Все последующие строки - id "богов", или тех, кто может раздавать mute или кидать punish
 """
 
-print(path[0])
-
 try:
     with open(path[0]+'/params.txt', 'r') as parameters:
         params = parameters.readlines()
@@ -126,9 +124,9 @@ class User:
             else:
                 answer, self.last_result = diceroll.roll(vk_session, self.id)
 
-        elif request in ['вики', 'wiki', 'wikipedia']:
-            if len(message) > 1:
-                answer = test_wiki.wiki_searching(','.join(message[1:]))
+        # elif request in ['вики', 'wiki', 'wikipedia']:
+        #     if len(message) > 1:
+        #         answer = test_wiki.wiki_searching(','.join(message[1:]))
 
         elif request in ['привет', "здравствуй", "хай", "hello", 'hi'] and time() - self.greeted > 600:
             if "бот" in request or 'bot' in request:
