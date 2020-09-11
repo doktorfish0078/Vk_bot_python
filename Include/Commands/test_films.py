@@ -16,15 +16,21 @@ def get_films():
         films = []
         rand_nmbs = [random.randint(0, len(films_name)),random.randint(0, len(films_name)),random.randint(0, len(films_name))]
 
-        for i in range(len(films_name)):
-            films.append("{} | {}, {}, режиссёр:{}".format(films_name[i].text, about_films[i*3].text,
-                                                           about_films[i * 3 + 1].text,  re.sub(r'\s+', ' ', about_films[i * 3 + 2].text )))
+        # for i in range(len(films_name)):
+        #     films.append("{} | {}, {}, режиссёр:{}".format(films_name[i].text, about_films[i*3].text,
+        #                                                    about_films[i * 3 + 1].text,  re.sub(r'\s+', ' ', about_films[i * 3 + 2].text )))
+        #А вот тут в 23:54 11.09 Я задался вопросом, зачем мы все фильмы переводим в текстовый вариант,если нам нужно только 3 рандомных?! Это же лишнее время
 
+        for i in rand_nmbs:
+            films.append("Фильм: {} | {} | Жанр: {} | Режиссёр:{}".format(films_name[i].text, about_films[i * 3].text,
+                                                           about_films[i * 3 + 1].text,
+                                                           re.sub(r'\s+', ' ', about_films[i * 3 + 2].text)))
 
-        for pp in rand_nmbs:
-            result += 'Фильм: ' + films[pp] + '\n'
+        # for pp in rand_nmbs:
+        #     result += 'Фильм: ' + films[pp] + '\n'
 
-        return result
+        return "\n".join(films)
     except BaseException:
         return "Не удалось получить фильмы :("
 
+print(get_films())
