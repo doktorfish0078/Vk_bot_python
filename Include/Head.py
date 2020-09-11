@@ -8,6 +8,8 @@ from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
 import parse_comands, send_msg
 from common_finder import find_common
+from sys import path
+from os import listdir
 
 from sys import exit
 from re import split
@@ -30,6 +32,8 @@ users = {}
 Вторая строка - id группы
 Все последующие строки - id "богов", или тех, кто может раздавать mute или кидать punish
 """
+
+print(listdir(path[0]))
 
 try:
     with open('params.txt', 'r') as parameters:
