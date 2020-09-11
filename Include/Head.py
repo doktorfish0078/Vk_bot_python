@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from Commands import weather, schedule, skirmish, myanimelist, \
-    how_week, list_commands, diceroll, greet, thanks_react, test_wiki
+    how_week, list_commands, diceroll, greet, thanks_react, test_wiki, special
 
 from vk_api import VkApi
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -39,8 +39,10 @@ class User:
 
     def under_parse_message(self, message):
         message.lower()
+        is_command = False
 
         if message[0] == '/':
+            is_command == True
             uncut = split(r"[\s/':;?,.<>()*&%$#!]+", message[1:])
             print(uncut)
             message = []
@@ -49,7 +51,7 @@ class User:
         else:
             return None
 
-        if time() - self.greeted < 30:
+        if time() - self.greeted < 30 and not is_command:
             self.parse_no_slash(message)
         else:
             self.parse_slash(message)
@@ -93,7 +95,8 @@ class User:
             answer, self.last_result = diceroll.flip(vk_session, self.id)
 
         elif request in ['roll', 'ролл']:
-            if len(message) > 3:
+            if len(message) >= 3:
+                print(message[1], message[2])
                 answer, self.last_result = diceroll.roll(vk_session, self.id, message[1], message[2])
             else:
                 answer, self.last_result = diceroll.roll(vk_session, self.id)
@@ -110,7 +113,13 @@ class User:
                 greet.hello(vk_session, self.id)
                 self.greeted = time()
 
+        elif self.id in gods:
+            if request in ['punish', 'наказать', "наказание"]:
+                 if len(message) > 1:
+                    send_msg.send_msg_tochat(vk_session, message[2] if len(message)>2 else 1, special.punish(vk_session, message[1]))
 
+            if request in ['shutdown']:
+                exit()
 
         if answer:
             self.last_use = time()
