@@ -15,5 +15,3 @@ def get_commands():
                "flip, монетка или coin - для подкидывания монетки\n" \
                "cinema, film, films или кино - для вывода 3 случайных фильмов\n"
     return commands
-
-print(get_commands())
