@@ -16,16 +16,33 @@ from time import time
 # "ee5ee2a15eae712b0b63dd92847a7a06cc9e5e0b4014d430b7fdde83897d9cd9cea7978a0754aae391607"
 # 186084635
 
-token = 'ee5ee2a15eae712b0b63dd92847a7a06cc9e5e0b4014d430b7fdde83897d9cd9cea7978a0754aae391607'
-group_id = '186084635'
+token = ''
+group_id = ''
 
 gods = []
-low_rank = []
 
 users = {}
 
-# with open('params.txt', 'r') as parameters:
-#     pass
+
+"""
+Файл с параметрами должен называться "params.txt" и иметь МИНИМУМ 2 строки
+Первая строка - токен приложения
+Вторая строка - id группы
+Все последующие строки - id "богов", или тех, кто может раздавать mute или кидать punish
+"""
+
+try:
+    with open('params.txt', 'r') as parameters:
+        params = parameters.readlines()
+        token = params[0].split('\n')[0]
+        group_id = params[1].split('\n')[0]
+
+        for god in params[2:]:
+            gods.append(int(god.split('\n')[0]))
+
+except (FileNotFoundError, IndexError):
+    print('Не найден файл с параметрами "params.txt"!')
+    exit()
 
 
 class User:

@@ -24,6 +24,4 @@ def get_films():
 
     return result
 
-print(get_films())
-
 
