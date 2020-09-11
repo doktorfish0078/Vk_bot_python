@@ -15,9 +15,6 @@ from sys import exit
 from re import split
 from time import time
 
-# "ee5ee2a15eae712b0b63dd92847a7a06cc9e5e0b4014d430b7fdde83897d9cd9cea7978a0754aae391607"
-# 186084635
-
 token = ''
 group_id = ''
 
@@ -99,6 +96,7 @@ class User:
             if 'завтра' in message or 'tomorrow' in message:
                 answer, self.last_result = weather.weather(tomorrow = True)
             else:
+                print(weather.weather())
                 answer, self.last_result = weather.weather()
 
         elif request in ['неделя', 'week']:
@@ -142,7 +140,6 @@ class User:
                     answer = ''
             else:
                 answer = 'А по кому стрелять то? По воробьям? Победили воробьи'
-
 
         elif request in ['slash']:
             self.slash_needed = not self.slash_needed

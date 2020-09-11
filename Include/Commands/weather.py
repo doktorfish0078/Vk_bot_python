@@ -28,4 +28,4 @@ def weather(tomorrow = False):
             out_weather[0] += timeday[day] + '\n'
         return out_weather
     except BaseException:
-        return 'pezda pogode'
+        return ['Погода не отвечает, сукааааа', None]
