@@ -12,19 +12,9 @@ def beautiful_num(num):
     return new
 
 
-def roll(vk_session, id, text_msg):
+def roll(vk_session, id, min=1, max=100):
     min = 1
     max = 100
-    try:
-        borders_buf = [border for border in
-                       re.split(r'[ ,]', re.search(r' *[\-+]?\d+ *[, ]+ *[\-+]?\d+ *', text_msg).group()) if
-                       border != '']
-        borders = [int(border) for border in borders_buf]
-        borders.sort()
-        min, max = borders
-    except (AttributeError, TypeError, ValueError):
-        # print("/roll crashed or auto-bordered")
-        pass
     result = str(randint(int(min), int(max)))
     return (
         "Случайное число  для @id{0}({1}) от {2} до {3} равняется {4}".format(

@@ -33,6 +33,7 @@ class Users:
         self.greeted = 0
         self.id = sender_id
         self.last_use = None
+        self.current_chat = None
         self.last_event = None
         self.last_result = None
 
@@ -40,11 +41,16 @@ class Users:
         message.lower()
 
         if message[0] == '/':
-            message = split("[\[\],/|}.?:;^%$#№<>()_=*&]+'", message[1:])
-            print(message)
+            uncut = split(r"[\s/':;?,.<>()*&%$#!]", message[1:])
+            print(uncut)
+            message = []
+            for under_str in uncut:
+                if under_str: message.append(under_str)
             self.last_use = time()
         else:
             return None
+
+
 
         if time() - self.greeted < 30:
             self.parse_no_slash(message)
@@ -69,13 +75,32 @@ class Users:
             self.last_event = 'w'
             if 'завтра' or 'tomorrow' in message:
                 answer, self.last_result = weather.weather(tomorrow = True)
-                print(answer, self.last_result)
             else:
                 answer, self.last_result = weather.weather()
 
-        # elif request in []:
+        elif request in ['неделя', 'week']:
+            self.last_event = 'q'
+            answer = how_week.how_week()
 
-        send_msg.send_msg_tochat(vk_session, 2, answer)
+        elif request in ['schedule', 'расписание']:
+            self.last_event = 'rasp'
+            attachment = schedule.schedule()
+            send_msg.send_photo_fromVK_tochat(vk_session, self.current_chat, attachment)
+
+        elif request in ['dice', 'кубик']:
+            self.last_event = 'd'
+            answer, self.last_result = diceroll.diceroll(vk_session, self.id)
+
+        elif request in ['flip', 'монетка', 'coin']:
+            self.last_event = 'f'
+            answer, self.last_result = diceroll.flip(vk_session, self.id)
+
+        elif request in ['roll', 'ролл']:
+            pass
+
+
+        if answer:
+            send_msg.send_msg_tochat(vk_session, 2, answer)
 
 
 
@@ -98,6 +123,8 @@ def main():
 
             if event.message['from_id'] not in users.keys():
                 users[sender] = Users(sender)
+
+            users[sender].current_chat = event.chat_id
 
             if event.message['attachments'] and event.message['attachments'][0]['type'] == 'audio_message':
                     pass
