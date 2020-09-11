@@ -96,7 +96,7 @@ class User:
             if 'завтра' in message or 'tomorrow' in message:
                 answer, self.last_result = weather.weather(tomorrow = True)
             else:
-                print(weather.weather())
+                # print(weather.weather())
                 answer, self.last_result = weather.weather()
 
         elif request in ['неделя', 'week']:
@@ -117,10 +117,10 @@ class User:
             answer, self.last_result = diceroll.flip(vk_session, self.id)
 
         elif request in ['roll', 'ролл']:
-            if len(message) >= 3:
-                answer, self.last_result = diceroll.roll(vk_session, self.id, message[1], message[2])
-            else:
-                answer, self.last_result = diceroll.roll(vk_session, self.id)
+            try:
+                answer, self.last_result = diceroll.roll(vk_session, self.id, int(message[1]), int(message[2]))
+            except BaseException:
+                answer, self.last_result = diceroll.roll(vk_session, self.id,)
 
         # elif request in ['вики', 'wiki', 'wikipedia']:
         #     if len(message) > 1:

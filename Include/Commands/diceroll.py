@@ -12,17 +12,17 @@ def beautiful_num(num):
     return new
 
 
-def roll(vk_session, id, min=1, max=100):
-    try:
-        result = str(randint(int(min), int(max)))
-    except BaseException:
-        result = str(randint(1, 100))
+def roll(vk_session, id, min = 1, max = 100):
+    if min > max:
+        buf = min
+        min = max
+        max = buf
+    result = str(randint(int(min), int(max)))
     return (
         "Случайное число  для @id{0}({1}) от {2} до {3} равняется {4}".format(
             id,
             vk_session.method('users.get', {'user_ids': id, 'name_case' : 'gen' })[0]['first_name'],
-            min, max, beautiful_num(result)
-    ), result
+            min, max, beautiful_num(result)), result
     )
 
 def diceroll(vk_session, id):
