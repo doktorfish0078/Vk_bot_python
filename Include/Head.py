@@ -77,85 +77,88 @@ class User:
     def parse(self, message):
         request = message[0]
         answer = ''
+        try:
+            if request in ['help', 'команды', 'помощь']:
+                answer = list_commands.get_commands()
 
-        if request in ['help', 'команды', 'помощь']:
-            answer = list_commands.get_commands()
+            elif request in ['anime', 'аниме']:
+                self.last_event = 'a'
+                answer = myanimelist.get_top()
+                """
+                    Пока оставил без входящих атрибутов, непонятно как работать должно просто))
+                """
 
-        elif request in ['anime', 'аниме']:
-            self.last_event = 'a'
-            answer = myanimelist.get_top()
-            """
-                Пока оставил без входящих атрибутов, непонятно как работать должно просто))
-            """
+            elif request in ['cinema', 'film', 'films', 'кино']:
+                answer = test_films.get_films()
 
-        elif request in ['cinema', 'film', 'films', 'кино']:
-            answer = test_films.get_films()
+            elif request in ['weather', 'погода']:
+                self.last_event = 'w'
+                if 'завтра' in message or 'tomorrow' in message:
+                    answer, self.last_result = weather.weather(tomorrow = True)
+                else:
+                    # print(weather.weather())
+                    answer, self.last_result = weather.weather()
 
-        elif request in ['weather', 'погода']:
-            self.last_event = 'w'
-            if 'завтра' in message or 'tomorrow' in message:
-                answer, self.last_result = weather.weather(tomorrow = True)
-            else:
-                # print(weather.weather())
-                answer, self.last_result = weather.weather()
+            elif request in ['неделя', 'week']:
+                self.last_event = 'q'
+                answer = how_week.how_week()
 
-        elif request in ['неделя', 'week']:
-            self.last_event = 'q'
-            answer = how_week.how_week()
+            elif request in ['schedule', 'расписание']:
+                self.last_event = 'rasp'
+                attachment = schedule.schedule()
+                send_msg.send_photo_fromVK_tochat(vk_session, self.current_chat, attachment)
 
-        elif request in ['schedule', 'расписание']:
-            self.last_event = 'rasp'
-            attachment = schedule.schedule()
-            send_msg.send_photo_fromVK_tochat(vk_session, self.current_chat, attachment)
+            elif request in ['dice', 'кубик']:
+                self.last_event = 'd'
+                answer, self.last_result = diceroll.diceroll(vk_session, self.id)
 
-        elif request in ['dice', 'кубик']:
-            self.last_event = 'd'
-            answer, self.last_result = diceroll.diceroll(vk_session, self.id)
+            elif request in ['flip', 'монетка', 'coin']:
+                self.last_event = 'f'
+                answer, self.last_result = diceroll.flip(vk_session, self.id)
 
-        elif request in ['flip', 'монетка', 'coin']:
-            self.last_event = 'f'
-            answer, self.last_result = diceroll.flip(vk_session, self.id)
-
-        elif request in ['roll', 'ролл']:
-            try:
-                answer, self.last_result = diceroll.roll(vk_session, self.id, int(message[1]), int(message[2]))
-            except BaseException:
-                answer, self.last_result = diceroll.roll(vk_session, self.id,)
-
-        # elif request in ['вики', 'wiki', 'wikipedia']:
-        #     if len(message) > 1:
-        #         answer = test_wiki.wiki_searching(','.join(message[1:]))
-
-        elif request in ['привет', "здравствуй", "хай", "hello", 'hi'] and time() - self.greeted > 600:
-            if "бот" in request or 'bot' in request:
-                greet.hello(vk_session, self.id)
-                self.greeted = time()
-
-        elif request in ['skirmish', 'перестрелка', "🔫", 'bang', 'маслина']:
-            if len(message) >= 2:
+            elif request in ['roll', 'ролл']:
                 try:
-                    second_warrior = message[1].split('|')[0][3:]
-                    answer, self.last_result = skirmish.skirmish(vk_session, self.id, second_warrior)
+                    answer, self.last_result = diceroll.roll(vk_session, self.id, int(message[1]), int(message[2]))
                 except BaseException:
-                    answer = ''
-            else:
-                answer = 'А по кому стрелять то? По воробьям? Победили воробьи'
+                    answer, self.last_result = diceroll.roll(vk_session, self.id,)
 
-        elif request in ['slash']:
-            self.slash_needed = not self.slash_needed
-            answer = 'Slash needed: {0}'.format('Yes' if self.slash_needed else 'No')
+            # elif request in ['вики', 'wiki', 'wikipedia']:
+            #     if len(message) > 1:
+            #         answer = test_wiki.wiki_searching(','.join(message[1:]))
 
-        elif self.id in gods:
-            if request in ['punish', 'наказать', "наказание"]:
-                 if len(message) > 1:
-                    send_msg.send_msg_tochat(vk_session, message[2] if len(message)>2 else 1, special.punish(vk_session, message[1].split('|')[0][3:]))
+            elif request in ['привет', "здравствуй", "хай", "hello", 'hi'] and time() - self.greeted > 600:
+                if "бот" in request or 'bot' in request:
+                    greet.hello(vk_session, self.id)
+                    self.greeted = time()
 
-            if request in ['shutdown']:
-                exit()
+            elif request in ['skirmish', 'перестрелка', "🔫", 'bang', 'маслина']:
+                if len(message) >= 2:
+                    try:
+                        second_warrior = message[1].split('|')[0][3:]
+                        answer, self.last_result = skirmish.skirmish(vk_session, self.id, second_warrior)
+                    except BaseException:
+                        answer = ''
+                else:
+                    answer = 'А по кому стрелять то? По воробьям? Победили воробьи'
 
-        if answer:
-            self.last_use = time()
-            send_msg.send_msg_tochat(vk_session, self.current_chat, answer)
+            elif request in ['slash']:
+                self.slash_needed = not self.slash_needed
+                answer = 'Slash needed: {0}'.format('Yes' if self.slash_needed else 'No')
+
+            elif self.id in gods:
+                if request in ['punish', 'наказать', "наказание"]:
+                     if len(message) > 1:
+                        send_msg.send_msg_tochat(vk_session, message[2] if len(message)>2 else 1, special.punish(vk_session, message[1].split('|')[0][3:]))
+
+                if request in ['shutdown']:
+                    exit()
+
+            if answer:
+                self.last_use = time()
+                send_msg.send_msg_tochat(vk_session, self.current_chat, answer)
+
+        except BaseException as error:
+            send_msg.send_msg_tochat(vk_session, 2, 'An Error occurred! {}'.format(error))
 
 
 def main():

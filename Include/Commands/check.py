@@ -1,3 +1,7 @@
 a = ''
 
-print(a if a else 4)
+
+try:
+    print(a + 10)
+except TypeError as a:
+    print(a)
