@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from Commands import weather, schedule, skirmish, myanimelist, \
-    how_week, list_commands, diceroll, greet, thanks_react, test_wiki, special, \
+    how_week, list_commands, diceroll, greet, thanks_react, special, \
     test_films
+
+    # test_wiki, \
 
 from vk_api import VkApi
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
@@ -19,6 +21,7 @@ token = '3390b47bcb8faa9ba278d163df8c7b8b456275c52931cffaf4d1993733575f379e2d3fc
 group_id = '198707501'
 
 gods = []
+banned = {}
 
 try:
     with open(path[0] + '/params.txt', 'r') as god:
@@ -145,10 +148,11 @@ class User:
             elif self.id in gods:
                 if request in ['punish', 'наказать', "наказание"]:
                      if len(message) > 1:
-                        send_msg.send_msg_tochat(vk_session, message[2] if len(message)>2 else 1, special.punish(vk_session, message[1].split('|')[0][3:]))
+                         try:
+                            send_msg.send_msg_tochat(vk_session, self.current_chat, special.punish(vk_session, message[1].split('|')[0][3:]))
+                         except BaseException:
+                             pass
 
-                if request in ['shutdown']:
-                    exit()
 
             if answer:
                 self.last_use = time()
@@ -166,11 +170,10 @@ def main():
     # try:
     print('Start')
     for event in longpoll.listen():
-
         if event.type == VkBotEventType.MESSAGE_NEW and event.from_chat:
             sender = event.message['from_id']
 
-            if event.message['from_id'] not in users.keys():
+            if sender not in users.keys():
                 users[sender] = User(sender)
 
             users[sender].current_chat = event.chat_id
