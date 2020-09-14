@@ -55,7 +55,7 @@ class User:
 
         print(message)
 
-        if is_command or:
+        if is_command:
             self.parse(message)
 
     def parse(self, message):
