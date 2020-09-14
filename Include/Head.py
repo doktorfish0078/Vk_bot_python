@@ -133,6 +133,7 @@ class User:
                 self.greeted = time()
 
         elif request in ['save', 'скопировать', 'copy']:
+            msg['text'] += ' '
             self.copied_text = msg['text'].split(' ', 1)[1]
 
         elif request in ['paste', 'вставить', 'print']:
