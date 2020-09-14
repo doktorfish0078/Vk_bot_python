@@ -19,12 +19,16 @@ token = '3390b47bcb8faa9ba278d163df8c7b8b456275c52931cffaf4d1993733575f379e2d3fc
 group_id = '198707501'
 
 gods = []
+
 try:
-    with open('params.txt','r') as f:
-        gods = f.read().split('\n')[1:]
-    gods = [int(god) for god in gods]
+    with open(path[0] + '/params.txt', 'r') as god:
+        params = god.readlines()
+
+        for god in params:
+            gods.append(int(god.split('\n')[0]))
+
 except FileNotFoundError:
-    print('No Gods!!!')
+    print('Не найдены боги!')
 
 #нужно сделать числами!
 users = {}
