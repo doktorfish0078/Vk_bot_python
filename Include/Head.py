@@ -19,7 +19,14 @@ token = '3390b47bcb8faa9ba278d163df8c7b8b456275c52931cffaf4d1993733575f379e2d3fc
 group_id = '198707501'
 
 gods = []
+try:
+    with open('params.txt','r') as f:
+        gods = f.read().split('\n')[1:]
+    gods = [int(god) for god in gods]
+except FileNotFoundError:
+    print('No Gods!!!')
 
+#нужно сделать числами!
 users = {}
 
 
@@ -32,7 +39,7 @@ class User:
         self.id = sender_id
         self.last_use = None
 
-        self.current_chat = None
+        self.current_chat = None #chat_id
 
         self.last_event = None
         self.last_result = None
@@ -88,7 +95,7 @@ class User:
 
             elif request in ['schedule', 'расписание']:
                 self.last_event = 'rasp'
-                attachment = schedule.schedule()
+                attachment = schedule.schedule(self.current_chat)
                 send_msg.send_photo_fromVK_tochat(vk_session, self.current_chat, attachment)
 
             elif request in ['dice', 'кубик', '🎲']:
@@ -157,7 +164,6 @@ def main():
     for event in longpoll.listen():
 
         if event.type == VkBotEventType.MESSAGE_NEW and event.from_chat:
-
             sender = event.message['from_id']
 
             if event.message['from_id'] not in users.keys():

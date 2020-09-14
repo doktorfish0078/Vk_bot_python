@@ -1,3 +1,18 @@
 from random import randint
-def schedule():
-    return "photo-186084635_457239280" if randint(1, 100) > 10 else "photo-186084635_457239147"
+#chat id:
+#1- test bota
+#2 - taverna
+
+schedule_for_other_group = {
+    1: 'photo-198707501_457239017',
+    2: 'photo-198707501_457239017',
+    3: None
+}
+def schedule(chat_id):
+    try:
+        return schedule_for_other_group[chat_id]
+    except BaseException:
+        print('траблы с расписанием')
+        return None
+
+print(schedule(2))
