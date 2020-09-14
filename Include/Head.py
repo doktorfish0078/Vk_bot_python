@@ -143,7 +143,7 @@ class User:
                 send_msg.send_msg_tochat(vk_session, self.current_chat, answer)
 
         except BaseException as error:
-            send_msg.send_msg_tochat(vk_session, 2, 'An Error occurred! {}'.format(error))
+            send_msg.send_msg_tochat(vk_session, 1, 'An Error occurred! {}'.format(error))
 
 
 def main():
