@@ -48,12 +48,14 @@ class User:
             for under_str in uncut:
                 if under_str:
                     message.append(under_str)
+            if len(message) == 0:
+                message.append('/')
         else:
             return None
 
         print(message)
 
-        if is_command:
+        if is_command or:
             self.parse(message)
 
     def parse(self, message):
@@ -78,7 +80,6 @@ class User:
                 if 'завтра' in message or 'tomorrow' in message:
                     answer, self.last_result = weather.weather(tomorrow = True)
                 else:
-                    # print(weather.weather())
                     answer, self.last_result = weather.weather()
 
             elif request in ['неделя', 'week']:
@@ -90,7 +91,7 @@ class User:
                 attachment = schedule.schedule()
                 send_msg.send_photo_fromVK_tochat(vk_session, self.current_chat, attachment)
 
-            elif request in ['dice', 'кубик']:
+            elif request in ['dice', 'кубик', '🎲']:
                 self.last_event = 'd'
                 answer, self.last_result = diceroll.diceroll(vk_session, self.id)
 
@@ -123,9 +124,9 @@ class User:
                 else:
                     answer = 'А по кому стрелять то? По воробьям? Победили воробьи'
 
-            elif request in ['slash']:
+            elif request in ['/']:
                 self.slash_needed = not self.slash_needed
-                answer = '/{0}'.format('on' if self.slash_needed else 'off')
+                answer = 'Slash: {0}'.format('on' if self.slash_needed else 'off')
 
             elif request in ['status']:
                 answer = 'Slash needed: {0}'.format('Yes' if self.slash_needed else 'No')
