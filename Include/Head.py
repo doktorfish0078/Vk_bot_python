@@ -15,34 +15,28 @@ from sys import exit
 from re import split
 from time import time
 
-token = ''
-group_id = ''
+token = '3390b47bcb8faa9ba278d163df8c7b8b456275c52931cffaf4d1993733575f379e2d3fc56a38db8ef7624'
+group_id = '198707501'
 
 gods = []
 
 users = {}
 
 
-"""
-Файл с параметрами должен называться "params.txt" и иметь МИНИМУМ 2 строки
-Первая строка - токен приложения
-Вторая строка - id группы
-Все последующие строки - id "богов", или тех, кто может раздавать mute или кидать punish
-"""
-
-try:
-    with open(path[0]+'/params.txt', 'r') as parameters:
-        params = parameters.readlines()
-        token = params[0].split('\n')[0]
-        group_id = params[1].split('\n')[0]
-
-        for god in params[2:]:
-            gods.append(int(god.split('\n')[0]))
-
-except FileNotFoundError:
-    print('Не найден файл с параметрами "params.txt"!')
-    exit()
-
+#
+# try:
+#     with open(path[0]+'/params.txt', 'r') as parameters:
+#         params = parameters.readlines()
+#         token = params[0].split('\n')[0]
+#         group_id = params[1].split('\n')[0]
+#
+#         for god in params[2:]:
+#             gods.append(int(god.split('\n')[0]))
+#
+# except FileNotFoundError:
+#     print('Не найден файл с параметрами "params.txt"!')
+#     exit()
+#
 
 class User:
 
@@ -51,7 +45,9 @@ class User:
         self.slash_needed = True
         self.id = sender_id
         self.last_use = None
+
         self.current_chat = None
+
         self.last_event = None
         self.last_result = None
 
