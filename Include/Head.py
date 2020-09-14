@@ -23,20 +23,6 @@ gods = []
 users = {}
 
 
-#
-# try:
-#     with open(path[0]+'/params.txt', 'r') as parameters:
-#         params = parameters.readlines()
-#         token = params[0].split('\n')[0]
-#         group_id = params[1].split('\n')[0]
-#
-#         for god in params[2:]:
-#             gods.append(int(god.split('\n')[0]))
-#
-# except FileNotFoundError:
-#     print('Не найден файл с параметрами "params.txt"!')
-#     exit()
-#
 
 class User:
 
