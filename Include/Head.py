@@ -130,7 +130,7 @@ class User:
             elif request in ['skirmish', 'перестрелка', "🔫", 'bang', 'маслина']:
                 if len(message) >= 2:
                     try:
-                        second_warrior = message[1].split('|')[0][3:]
+                        second_warrior = int(message[1].split('|')[0][3:])
                         answer, self.last_result = skirmish.skirmish(vk_session, self.id, second_warrior)
                     except BaseException:
                         answer = ''
