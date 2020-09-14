@@ -143,6 +143,9 @@ class User:
 
             elif request in ['slash']:
                 self.slash_needed = not self.slash_needed
+                answer = '/{0}'.format('on' if self.slash_needed else 'off')
+
+            elif request in ['status']:
                 answer = 'Slash needed: {0}'.format('Yes' if self.slash_needed else 'No')
 
             elif self.id in gods:
