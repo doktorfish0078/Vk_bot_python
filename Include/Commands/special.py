@@ -20,13 +20,15 @@ def punish(vk_session, to_punish):
             enemy_id, first_name),
         4: 'Ты думаешь это шутка? Нет, @id{}({}), шутка это твоя жизнь блять, при этом не очень удачная'.format(
             enemy_id, first_name),
-        5: 'Я ебал жену @id{}({})\nМне сасала дочь @id{}({})\nКак тебе рифма?'.format(enemy_id, first_name, enemy_id,
-                                                                                      first_name)
+        5: 'Я ебал жену @id{}({})\nМне сасала дочь @id{}({})\nКак тебе рифма?'.format(enemy_id,
+                            vk_session.method('users.get', {'user_ids': enemy_id, 'name_case':'gen'})[0]['first_name'],
+                                                                                      enemy_id,
+                            vk_session.method('users.get', {'user_ids': enemy_id, 'name_case':'gen'})[0]['first_name'])
     }
 
     punishment_options_woman = {
         0: 'Пососи, собакоподобная пакость, не становись ортомом, @id{}({})'.format(enemy_id, first_name),
-        1: 'Женщина лучший друг человека, @id{}({}), но ты явно лучший друг ортёма (фу)'.format(enemy_id, first_name),
+        1: 'Женщина лучший друг человека, но ты, @id{}({}), явно лучший друг ортёма (фу)'.format(enemy_id, first_name),
         2: 'Пажилая сперма капает на твоё личико, @id{}({}), подобное поведение явно стало твоей ошибкой'.format(
             enemy_id, first_name),
         3: 'Кто волки, кто овцы... А ты, @id{}({}), просто конченная овца'.format(enemy_id, first_name)
