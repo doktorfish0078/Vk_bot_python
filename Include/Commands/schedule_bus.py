@@ -18,8 +18,9 @@ def get_byte_screen_schedule_bus(text_msg):
         print('Не был распознан номер автобуса или нет автобуса с таким номером')
         return None
     URL += numb_bus
-    print(path[0] + '\phantomjs')
-    driver = webdriver.PhantomJS(path[0] + '\phantomjs')
+    for pat in path:
+        print(pat)
+    driver = webdriver.PhantomJS(path[0] + '/phantomjs')
     driver.set_window_size(1600, 2070)
     try:
         driver.get(URL)
