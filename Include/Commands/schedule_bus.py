@@ -12,7 +12,8 @@ def get_byte_screen_schedule_bus(text_msg):
     :param text_msg:
     :return: Возвращает бинарный вид png скриншота
     """
-    path_phantomjs = os.environ.get('PATH_PHANTOMJS_BIN', None)
+    print(os.environ)
+    path_phantomjs = os.environ.get('PATH', None)
     URL = "https://igis.ru/gortrans/bus/izh/"  # izh/номер автобуса
     numb_bus = get_numb_bus(text_msg)
     if numb_bus is None or not(2 <= int(numb_bus) <= 400):
