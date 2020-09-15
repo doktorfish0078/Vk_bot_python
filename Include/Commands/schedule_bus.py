@@ -2,6 +2,7 @@ from selenium import webdriver
 from PIL import Image
 from io import BytesIO
 from sys import path
+import os
 
 import re
 
@@ -11,16 +12,15 @@ def get_byte_screen_schedule_bus(text_msg):
     :param text_msg:
     :return: Возвращает бинарный вид png скриншота
     """
-
+    path_phantomjs = os.environ.get('PATH_PHANTOMJS_BIN', None)
     URL = "https://igis.ru/gortrans/bus/izh/"  # izh/номер автобуса
     numb_bus = get_numb_bus(text_msg)
     if numb_bus is None or not(2 <= int(numb_bus) <= 400):
         print('Не был распознан номер автобуса или нет автобуса с таким номером')
         return None
     URL += numb_bus
-    for pat in path:
-        print(pat)
-    driver = webdriver.PhantomJS(path[0] + '/phantomjs')
+
+    driver = webdriver.PhantomJS(path_phantomjs)
     driver.set_window_size(1600, 2070)
     try:
         driver.get(URL)
