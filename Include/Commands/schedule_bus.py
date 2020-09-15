@@ -13,7 +13,7 @@ def get_byte_screen_schedule_bus(text_msg):
     :return: Возвращает бинарный вид png скриншота
     """
     print(os.environ)
-    path_phantomjs = os.environ.get('PATH', None)
+    path_phantomjs = os.environ.get('PATH_PHANTOMJS_BIN', None)
     URL = "https://igis.ru/gortrans/bus/izh/"  # izh/номер автобуса
     numb_bus = get_numb_bus(text_msg)
     if numb_bus is None or not(2 <= int(numb_bus) <= 400):
@@ -21,7 +21,7 @@ def get_byte_screen_schedule_bus(text_msg):
         return None
     URL += numb_bus
 
-    driver = webdriver.PhantomJS(path_phantomjs)
+    driver = webdriver.PhantomJS(executable_path=path_phantomjs)
     driver.set_window_size(1600, 2070)
     try:
         driver.get(URL)
