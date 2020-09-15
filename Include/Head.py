@@ -23,7 +23,6 @@ group_id = '198707501'
 
 gods = []
 banned = {}
-
 try:
     with open(path[0] + '/params.txt', 'r') as god:
         params = god.readlines()
