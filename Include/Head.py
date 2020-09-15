@@ -127,17 +127,17 @@ class User:
         #     if len(message) > 1:
         #         answer = test_wiki.wiki_searching(','.join(message[1:]))
 
-        elif request in ['автобус', 'автобуса']:
-            send_msg.send_msg_tochat(vk_session, self.current_chat,
-                                     'Получаем расписание вашего автобуса... Ожидайте около 10-15 секунд,'
-                                     'в зависимости от лагов в ВК ;)')
-            attachment = post_request_to_VK.get_attachment(
-                vk_api, schedule_bus.get_byte_screen_schedule_bus(' '.join(words_from_msg)))
-            if attachment:
-                self.last_event = 'bus'
-                send_msg.send_photo_fromVK_tochat(vk_session, self.current_chat,attachment)
-            else:
-                answer = 'Не удалось получить расписание автобуса :('
+        # elif request in ['автобус', 'автобуса']:
+        #     send_msg.send_msg_tochat(vk_session, self.current_chat,
+        #                              'Получаем расписание вашего автобуса... Ожидайте около 10-15 секунд,'
+        #                              'в зависимости от лагов в ВК ;)')
+        #     attachment = post_request_to_VK.get_attachment(
+        #         vk_api, schedule_bus.get_byte_screen_schedule_bus(' '.join(words_from_msg)))
+        #     if attachment:
+        #         self.last_event = 'bus'
+        #         send_msg.send_photo_fromVK_tochat(vk_session, self.current_chat,attachment)
+        #     else:
+        #         answer = 'Не удалось получить расписание автобуса :('
 
 
         elif request in ['привет', "здравствуй", "хай", "hello", 'hi'] and time() - self.greeted > 600:

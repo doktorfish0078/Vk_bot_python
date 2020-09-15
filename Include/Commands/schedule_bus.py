@@ -21,9 +21,10 @@ def get_byte_screen_schedule_bus(text_msg):
         return None
     URL += numb_bus
 
-    driver = webdriver.PhantomJS(executable_path=path_phantomjs)
-    driver.set_window_size(1600, 2070)
+
     try:
+        driver = webdriver.PhantomJS(executable_path=path_phantomjs)
+        driver.set_window_size(1600, 2070)
         driver.get(URL)
         elem = driver.find_element_by_class_name("table-st1")  # находим нужный нам элемент
         screen = driver.get_screenshot_as_png()  # получаем байтовое представление скриншота
