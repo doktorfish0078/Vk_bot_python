@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from Commands import weather, schedule, skirmish, myanimelist, \
     how_week, list_commands, diceroll, greet, thanks_react, special, \
-    test_films
+    test_films, schedule_bus
 
     # test_wiki, \
 
@@ -9,6 +9,7 @@ from vk_api import VkApi
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
 import parse_comands, send_msg
+import post_request_to_VK
 from common_finder import find_common
 from sys import path
 from os import listdir
@@ -75,8 +76,8 @@ class User:
         if is_command:
             self.parse(message, msg)
 
-    def parse(self, message, msg):
-        request = message[0]
+    def parse(self, words_from_msg, msg):
+        request = words_from_msg[0]
         answer = ''
 
         # try:
@@ -95,7 +96,7 @@ class User:
 
         elif request in ['weather', 'погода']:
             self.last_event = 'w'
-            if 'завтра' in message or 'tomorrow' in message:
+            if 'завтра' in words_from_msg or 'tomorrow' in words_from_msg:
                 answer, self.last_result = weather.weather(tomorrow = True)
             else:
                 answer, self.last_result = weather.weather()
@@ -119,13 +120,26 @@ class User:
 
         elif request in ['roll', 'ролл']:
             try:
-                answer, self.last_result = diceroll.roll(vk_session, self.id, int(message[1]), int(message[2]))
+                answer, self.last_result = diceroll.roll(vk_session, self.id, int(words_from_msg[1]), int(words_from_msg[2]))
             except BaseException:
                 answer, self.last_result = diceroll.roll(vk_session, self.id,)
 
         # elif request in ['вики', 'wiki', 'wikipedia']:
         #     if len(message) > 1:
         #         answer = test_wiki.wiki_searching(','.join(message[1:]))
+
+        elif request in ['автобус', 'автобуса']:
+            send_msg.send_msg_tochat(vk_session, self.current_chat,
+                                     'Получаем расписание вашего автобуса... Ожидайте около 10-15 секунд,'
+                                     'в зависимости от лагов в ВК ;)')
+            attachment = post_request_to_VK.get_attachment(
+                vk_api, schedule_bus.get_byte_screen_schedule_bus(' '.join(words_from_msg)))
+            if attachment:
+                self.last_event = 'bus'
+                send_msg.send_photo_fromVK_tochat(vk_session, self.current_chat,attachment)
+            else:
+                answer = 'Не удалось получить расписание автобуса :('
+
 
         elif request in ['привет', "здравствуй", "хай", "hello", 'hi'] and time() - self.greeted > 600:
             if "бот" in request or 'bot' in request:
@@ -140,9 +154,9 @@ class User:
             answer = self.copied_text
 
         elif request in ['skirmish', 'перестрелка', "🔫", 'bang', 'маслина']:
-            if len(message) >= 2:
+            if len(words_from_msg) >= 2:
                 try:
-                    second_warrior = int(message[1].split('|')[0][3:])
+                    second_warrior = int(words_from_msg[1].split('|')[0][3:])
                     answer, self.last_result = skirmish.skirmish(vk_session, self.id, second_warrior)
                 except BaseException:
                     answer = ''
@@ -158,9 +172,9 @@ class User:
 
         elif self.id in gods:
             if request in ['punish', 'наказать', "наказание"]:
-                 if len(message) > 1:
+                 if len(words_from_msg) > 1:
                      try:
-                        send_msg.send_msg_tochat(vk_session, self.current_chat, special.punish(vk_session, message[1].split('|')[0][3:]))
+                        send_msg.send_msg_tochat(vk_session, self.current_chat, special.punish(vk_session, words_from_msg[1].split('|')[0][3:]))
                      except BaseException:
                          pass
 
@@ -175,9 +189,10 @@ class User:
 
 def main():
     global vk_session
+    global vk_api
     vk_session = VkApi(token=token)
     longpoll = VkBotLongPoll(vk_session, group_id, wait=10)
-
+    vk_api = vk_session.get_api()
     # try:
     print('Start')
     for event in longpoll.listen():
