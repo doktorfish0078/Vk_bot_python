@@ -1,6 +1,7 @@
 from selenium import webdriver
 from PIL import Image
 from io import BytesIO
+from sys import path
 
 import re
 
@@ -18,7 +19,7 @@ def get_byte_screen_schedule_bus(text_msg):
         return None
     URL += numb_bus
 
-    driver = webdriver.PhantomJS()
+    driver = webdriver.PhantomJS(path[0] + '/phantomjs')
     driver.set_window_size(1600, 2070)
     try:
         driver.get(URL)
@@ -56,4 +57,3 @@ def get_numb_bus(text_msg):
     if index_bus < len(words) - 1 and words[index_bus + 1].isdigit():  # проверяем слово после автобуса
         return words[index_bus + 1]
     return None
-
