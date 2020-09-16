@@ -12,7 +12,7 @@ import parse_comands, send_msg
 import post_request_to_VK
 from common_finder import find_common
 from sys import path
-from os import listdir
+from random import randint
 
 from sys import exit
 from re import split
@@ -169,14 +169,30 @@ class User:
         elif request in ['status']:
             answer = 'Slash needed: {0}'.format('Yes' if self.slash_needed else 'No')
 
-        elif self.id in gods:
-            if request in ['punish', 'наказать', "наказание"]:
-                 if len(words_from_msg) > 1:
-                     try:
-                        send_msg.send_msg_tochat(vk_session, self.current_chat, special.punish(vk_session, words_from_msg[1].split('|')[0][3:]))
-                     except BaseException:
-                         pass
-
+        # elif self.id in gods:
+        #     if request in ['punish', 'наказать', "наказание"]:
+        #          if len(words_from_msg) > 1:
+        #              try:
+        #                 send_msg.send_msg_tochat(vk_session, self.current_chat, special.punish(vk_session, words_from_msg[1].split('|')[0][3:]))
+        #              except BaseException:
+        #                  pass
+        #
+        # Временное решение.
+        elif request in ['punish', 'наказать', "наказание"]:
+            if len(words_from_msg) > 1:
+                print('gay')
+                try:
+                    send_msg.send_msg_tochat(vk_session, self.current_chat,
+                                             ['@id{}({}) пат столик быстра ',
+                                              'А чё ещё тебе сделать, @id{}({})? пасаси лучше ',
+                                              '@id{}({}) извинись',
+                                              'Фейспалм... @id{}(ты) в муте'][randint(0,3)].format(
+                                                 self.id,
+                                                 vk_session.method('users.get',
+                                                                  {'user_ids':  self.id})[0]['first_name']))
+                except BaseException:
+                    pass
+        # Функция в разработке: можете менять, комментировать.
 
         if answer:
             self.last_use = time()
