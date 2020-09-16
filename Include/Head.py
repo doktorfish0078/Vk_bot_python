@@ -169,14 +169,14 @@ class User:
         elif request in ['status']:
             answer = 'Slash needed: {0}'.format('Yes' if self.slash_needed else 'No')
 
-        # elif self.id in gods:
-        #     if request in ['punish', 'наказать', "наказание"]:
-        #          if len(words_from_msg) > 1:
-        #              try:
-        #                 send_msg.send_msg_tochat(vk_session, self.current_chat, special.punish(vk_session, words_from_msg[1].split('|')[0][3:]))
-        #              except BaseException:
-        #                  pass
-        #
+        elif self.id in gods:
+            if request in ['punish', 'наказать', "наказание"]:
+                 if len(words_from_msg) > 1:
+                     try:
+                        send_msg.send_msg_tochat(vk_session, self.current_chat, special.punish(vk_session, words_from_msg[1].split('|')[0][3:]))
+                     except BaseException:
+                         pass
+
         # Временное решение.
         elif request in ['punish', 'наказать', "наказание"]:
             if len(words_from_msg) > 1:
