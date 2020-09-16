@@ -66,10 +66,16 @@ class User:
         if message[0] == '/' or not self.slash_needed:
             is_command = True
             uncut = split(r"[\s/':;?,.<>()*&%$#!]+", message)
-            message = []
-            for under_str in uncut:
-                if under_str:
-                    message.append(under_str)
+            # должно быть как-то так, скоро допишу
+            # uncut = split(r"[\W^\-]+", message)
+            message = [word for word in uncut if len(word) > 0]
+            # почему генераторы не юзаем?
+            # for under_str in uncut:
+            #     if under_str:
+            #         message.append(under_str)
+            print(message)
+            if len(message) == 0:
+                return None
         else:
             return None
 
