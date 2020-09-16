@@ -184,6 +184,7 @@ class User:
                     pass
 
 
+        # Эта строка сделана чтобы в этом файле было 228 строк
 
         if answer:
             self.last_use = time()
