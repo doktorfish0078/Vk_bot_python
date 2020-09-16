@@ -65,9 +65,9 @@ class User:
 
         if message[0] == '/' or not self.slash_needed:
             is_command = True
-            uncut = split(r"[\s/':;?,.<>()*&%$#!]+", message)
-            # должно быть как-то так, скоро допишу
-            # uncut = split(r"[\W^\-]+", message)
+            # uncut = split(r"[\s/':;?,.<>()*&%$#!]+", message)
+            # новый вариант, старое удалим после успешного стресс-теста: 
+            uncut = split(r"[^\-\w]+", message)
             message = [word for word in uncut if len(word) > 0]
             # почему генераторы не юзаем?
             # for under_str in uncut:
