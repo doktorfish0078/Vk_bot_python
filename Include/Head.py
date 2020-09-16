@@ -37,7 +37,6 @@ except FileNotFoundError:
 users = {}
 
 
-
 class User:
 
     def __init__(self, sender_id):
@@ -66,14 +65,13 @@ class User:
         if message[0] == '/' or not self.slash_needed:
             is_command = True
             # uncut = split(r"[\s/':;?,.<>()*&%$#!]+", message)
-            # новый вариант, старое удалим после успешного стресс-теста: 
+            # новый вариант, старое удалим после успешного стресс-теста:
             uncut = split(r"[^\-\w]+", message)
             message = [word for word in uncut if len(word) > 0]
             # почему генераторы не юзаем?
             # for under_str in uncut:
             #     if under_str:
             #         message.append(under_str)
-            print(message)
             if len(message) == 0:
                 return None
         else:
@@ -233,6 +231,7 @@ def main():
 
             elif event.message['text']:
                 users[sender].under_parse_message(event.message)
+
     # except BaseException as error:
     #     send_msg(vk_session, 1, error)
     # finally:

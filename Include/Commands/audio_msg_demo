@@ -1,0 +1,27 @@
+# ==============demoversion==============demoversion==============demoversion==============demoversion=======
+
+def audio_msg_info(msg_audio):
+    print(msg_audio['peer_id'])
+    print(msg_audio['conversation_message_id'])
+    print(group_id)
+    return vk_session.method("messages.getByConversationMessageId",
+                             {"peer_id": msg_audio["peer_id"],
+                              "conversation_message_ids": msg_audio["conversation_message_id"],
+                              "group_id": group_id})
+    # return vk_api.messages.getByConversationMessageId(
+    #     {"peer_id": msg_audio['peer_id'],
+    #      "conversation_message_ids": msg_audio['conversation_message_id'],
+    #      "group_id": group_id})
+
+def parse_audio_msg(event):
+    msg_audio = event.message
+    # ['attachments'][0]['audio_message']['link_mp3']
+    print(msg_audio)
+    current_state = audio_msg_info(msg_audio)
+    print(current_state)
+    if current_state['count'] > 0:
+        while 'transcript_state' in current_state['attachments'][0].keys:
+            current_state = audio_msg_info(msg_audio)
+    return
+
+# ==============demoversion==============demoversion==============demoversion==============demoversion=======
