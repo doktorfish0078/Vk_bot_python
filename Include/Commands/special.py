@@ -1,7 +1,7 @@
 from random import randint
 
 
-def punish(vk_session, to_punish):
+def punish(vk_session, is_god, to_punish):
     try:
         enemy_id = to_punish
     except BaseException:
@@ -34,5 +34,18 @@ def punish(vk_session, to_punish):
         3: 'Кто волки, кто овцы... А ты, @id{}({}) -- просто конченная овца'.format(enemy_id, first_name)
     }
 
-    rand = randint(0, len(punishment_options_man) - 1) if sex == 2 else randint(0, len(punishment_options_woman) - 1)
-    return punishment_options_man[rand] if sex == 2 else punishment_options_woman[rand]
+    punishment_options_not_god = {
+        0: '@id{}({}), пат столик быстра'.format(enemy_id, first_name),
+        1: 'А чё ещё тебе сделать, @id{}({})? Пасаси лучше'.format(enemy_id, first_name),
+        2: '@id{}({}), лучше извинись'.format(enemy_id, first_name),
+        3: 'Фейспалм... @id{}(Ты) в муте'.format(enemy_id)
+
+    }
+    if is_god:
+        if sex == 2:
+            return punishment_options_man[randint(0, len(punishment_options_man)-1)]
+        else:
+            return punishment_options_woman[randint(0, len(punishment_options_woman)-1)]
+    else:
+        return punishment_options_not_god[randint(0, len(punishment_options_not_god)-1)]
+
