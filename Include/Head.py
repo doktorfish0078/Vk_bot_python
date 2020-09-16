@@ -60,6 +60,9 @@ class User:
         if message == '/':
             message += 'slash '
 
+        if message == '/?':
+            message += 'status'
+
         if message[0] == '/' or not self.slash_needed:
             is_command = True
             uncut = split(r"[\s/':;?,.<>()*&%$#!]+", message)
