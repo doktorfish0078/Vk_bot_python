@@ -177,15 +177,12 @@ class User:
             answer = 'Slash needed: {0}'.format('Yes' if self.slash_needed else 'No')
 
         elif request in ['punish', 'наказать', "наказание"]:
-            if self.id in gods:
-                if len(words_from_msg) > 1:
-                    try:
-                        answer = special.punish(vk_session, True, words_from_msg[1].split('|')[0][3:])
-                    except BaseException:
-                        pass
+            if len(words_from_msg) > 1:
+                try:
+                    answer = special.punish(vk_session, self.id in gods, words_from_msg[1].split('|')[0][3:])
+                except BaseException:
+                    pass
 
-            else:
-                answer = special.punish(vk_session, False, self.id)
 
 
         if answer:
