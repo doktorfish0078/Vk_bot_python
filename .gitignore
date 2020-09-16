@@ -1,0 +1,11 @@
+
+Include/Commands/__pycache__/schedule.cpython-38.pyc
+*.pyc
+*.pyc
+*.pyc
+Include/Commands/__pycache__/diceroll.cpython-38.pyc
+Include/Commands/__pycache__/diceroll.cpython-38.pyc
+Include/Commands/__pycache__/how_week.cpython-38.pyc
+*.pyc
+/Include/__pycache__
+/Include/Commands/__pycache__
