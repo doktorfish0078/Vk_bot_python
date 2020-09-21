@@ -175,7 +175,7 @@ class User:
             elif request in ['punish', 'наказать', "наказание"]:
                 if len(words_from_msg) > 1:
                     try:
-                        answer = special.punish(vk_session, self.id in gods, words_from_msg[1][2:])
+                        answer = special.punish(vk_session, self.id in gods, words_from_msg[1][2:], self.id)
                     except BaseException:
                         pass
 
