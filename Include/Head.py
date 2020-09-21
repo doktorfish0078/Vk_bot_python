@@ -181,7 +181,10 @@ class User:
 
             if request in ['idea', 'идея', 'передложение']:
                 for user in gods:
-                    send_msg.send_msg_touser(vk_session, user, msg['text'].lower().split(request)[1])
+                    try:
+                        send_msg.send_msg_touser(vk_session, user, msg['text'].lower().split(request)[1])
+                    except vk_api.exceptions.ApiError:
+                        pass
 
 
             if answer:
