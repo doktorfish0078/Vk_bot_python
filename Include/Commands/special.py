@@ -24,7 +24,12 @@ def punish(vk_session, is_god, to_punish, sender_id):
         5: 'Я ебал жену @id{}({})!\nМне сасала дочь @id{}({})!\nКак тебе рифма?'.format(enemy_id,
                             vk_session.method('users.get', {'user_ids': enemy_id, 'name_case':'gen'})[0]['first_name'],
                                                                                       enemy_id,
-                            vk_session.method('users.get', {'user_ids': enemy_id, 'name_case':'gen'})[0]['first_name'])
+                            vk_session.method('users.get', {'user_ids': enemy_id, 'name_case':'gen'})[0]['first_name']),
+        6: '@id{}({}) угрожающе размахивает клешнями, начинает набирать борзоми для гадзы, '
+           'но подскальзывается на птичьем кале и падает прямо ртом на письку оппонента'.format(
+            enemy_id, first_name),
+        7: '@id{}({}) кинул предъяву в сторону пажилой мафии, за что высшие силы были вынуждены его моментально потушить'.format(
+            enemy_id, first_name)
     }
 
     punishment_options_woman = {
@@ -32,7 +37,9 @@ def punish(vk_session, is_god, to_punish, sender_id):
         1: 'Женщина -- лучший друг человека, но ты, @id{}({}), явно лучший друг ортёма (фу)'.format(enemy_id, first_name),
         2: 'Пажилая сперма капает на твоё личико, @id{}({}), подобное поведение явно стало твоей ошибкой'.format(
             enemy_id, first_name),
-        3: 'Кто волки, кто овцы... А ты, @id{}({}) -- просто конченная овца'.format(enemy_id, first_name)
+        3: 'Кто волки, кто овцы... А ты, @id{}({}) -- просто конченная овца'.format(enemy_id, first_name),
+        4: 'Девачка па кличке @id{}({}) решила, что может изливать свою грязь публично)))) Иди подмойся дурашка..'.format(enemy_id, first_name),
+        5: '@id{}({}) сладкая как такос с гавном и красивая как фото с ортёмом'.format(enemy_id, first_name)
     }
 
     punishment_options_not_god = {
