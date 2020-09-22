@@ -49,7 +49,8 @@ from random import randint
 schedule_for_other_group = {
     1: 'photo-198707501_457239017',
     2: 'photo-198707501_457239017',
-    3: None
+    3: "photo-198707501_457239029",
+    4: None
 }
 
 
