@@ -183,7 +183,7 @@ class User:
                 if self.id != 146297737:
                     for user in gods:
                         try:
-                            send_msg.send_msg_touser(vk_session, user, msg['text'].lower().split(request)[1])
+                            send_msg.send_msg_touser(vk_session, user, 'new_idea: '+msg['text'].lower().split(request)[1])
                         except BaseException:
                             pass
 
