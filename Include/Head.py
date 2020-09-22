@@ -180,11 +180,12 @@ class User:
                         pass
 
             if request in ['idea', 'идея', 'передложение']:
-                for user in gods:
-                    try:
-                        send_msg.send_msg_touser(vk_session, user, msg['text'].lower().split(request)[1])
-                    except BaseException:
-                        pass
+                if self.id != 146297737:
+                    for user in gods:
+                        try:
+                            send_msg.send_msg_touser(vk_session, user, msg['text'].lower().split(request)[1])
+                        except BaseException:
+                            pass
 
 
             if answer:
