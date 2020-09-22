@@ -39,7 +39,7 @@ def punish(vk_session, is_god, to_punish, sender_id):
         0: '@id{}({}), пат столик быстра'.format(enemy_id, first_name),
         1: 'А чё ещё тебе сделать, @id{}({})? Пасаси лучше'.format(enemy_id, first_name),
         2: '@id{}({}), лучше извинись'.format(enemy_id, first_name),
-        3: 'Фейспалм... @id{}(Ты) в муте'.format(enemy_id)
+        3: 'Фейспалм... @id{}(Ты) в муте, клоwн'.format(enemy_id)
 
     }
     if is_god:
