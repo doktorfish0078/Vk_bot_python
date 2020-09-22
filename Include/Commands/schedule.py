@@ -3,6 +3,8 @@ from random import randint
 # chat id:
 # 1- test bota
 # 2 - taverna
+# 3 - Беседа у Батоса с Гелей и Матвеем
+# 4 - Предположительно - беседа Антона
 
 # lesson = {
 #     '1 пара': 1,
@@ -49,8 +51,9 @@ from random import randint
 schedule_for_other_group = {
     1: 'photo-198707501_457239017',
     2: 'photo-198707501_457239017',
-    3: "photo-198707501_457239029",
-    4: None
+    3: 'photo-198707501_457239017',
+    4: "photo-198707501_457239029",
+    5: None
 }
 
 
