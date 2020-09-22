@@ -53,8 +53,8 @@ class User:
         self.last_event = None
         self.last_result = None
 
-        self.banned = None
-        self.banned_for = None
+        self.banned = time()
+        self.banned_for = 0
 
     def under_parse_message(self, msg):
         message = msg['text'].lower()
@@ -79,7 +79,7 @@ class User:
         print(message)
 
         if is_command:
-            if self.banned and (self.banned + self.banned_for <= time()):
+            if (self.banned + self.banned_for <= time()):
                 self.parse(message, msg)
 
     def parse(self, words_from_msg, msg):
@@ -195,20 +195,23 @@ class User:
             if request in ['ban', 'бан', "blacklist"]:
                 if self.id in gods:
                     try:
-                        to_ban = words_from_msg[1][2:]
-                    except IndexError
-                    if to_ban in users.keys():
-                        to_ban_user = users[to_ban]
-                    else:
-                        to_ban_user = users[to_ban] = User(to_ban)
+                        if 'id' in words_from_msg[1][2:]:
+                            to_ban = int(words_from_msg[1][2:])
+                            if to_ban in users.keys():
+                                to_ban_user = users[to_ban]
+                            else:
+                                to_ban_user = users[to_ban] = User(to_ban)
 
-                    users[to_ban_user].banned = time()
-                    if len(words_from_msg) > 2:
-                        users[to_ban_user].banned_for = words_from_msg[2]*60
-                    else:
-                        users[to_ban_user].banned_for = 60
-                    answer = "Пользователь @id{} не может пользоваться ботом следующие {} минут".format(words_from_msg[1][2:], words_from_msg[2])
+                            users[to_ban_user].banned = time()
+                            if len(words_from_msg) > 3:
+                                users[to_ban_user].banned_for = words_from_msg[3] * 60
+                            else:
+                                users[to_ban_user].banned_for = 60
+                            answer = "Пользователь @id{} не может пользоваться ботом".format(to_ban)
 
+                    except (IndexError, TypeError) as error:
+                        answer = 'А каво банить та а каво каво'
+                        print(error)
 
             if answer:
                 self.last_use = time()
