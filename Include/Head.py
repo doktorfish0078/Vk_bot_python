@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from Commands import weather, schedule, skirmish, myanimelist, \
     how_week, list_commands, diceroll, greet, thanks_react, special, \
-    test_films\
+    test_films, choose\
     # , schedule_bus
 
     # test_wiki, \
@@ -192,6 +192,8 @@ class User:
                     except BaseException:
                         pass
 
+        if request in ['choose', 'выбрать', 'выбери']:
+            choose.choose(msg.split(request)[1])
 
         if request in ['ban', 'бан', "blacklist"]:
             if self.id in gods:
