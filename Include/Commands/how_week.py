@@ -1,11 +1,10 @@
-import requests
-from bs4 import BeautifulSoup
+from datetime import date, datetime
+
 
 def how_week():
-    try:
-        html_text = requests.get('https://istu.ru').text
-        soup = BeautifulSoup(html_text, features="html.parser")
-        week = soup.find('div', {'class': 'site-header-top-element ref-week type-separated'}).find('span').text
-        return week
-    except BaseException:
-        return 'Не удалось получить информацию о неделе'
+    now = datetime.now()
+
+    week_num = date(now.year, now.month, now.day).isocalendar()[1]
+    if week_num%2 == 0:
+        return '⤊↾⇯⇈⟰⥠⥜ Неделя над чертой ⇑↑⇡⬆︎⥘⇫⤒⇞'
+    return '⇩⥝⥙↯⇊⤋ Неделя под чертой ↧⥡⇃↓⥡⤈'

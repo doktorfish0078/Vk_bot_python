@@ -34,8 +34,6 @@ try:
 except FileNotFoundError:
     print('Не найдены боги!')
 
-#нужно сделать числами!
-
 global users
 users = {}
 
@@ -110,9 +108,9 @@ class User:
             else:
                 answer, self.last_result = weather.weather()
 
-        # elif request in ['неделя', 'week']:
-        #     self.last_event = 'q'
-        #     answer = how_week.how_week()
+        elif request in ['неделя', 'week']:
+            self.last_event = 'q'
+            answer = how_week.how_week()
 
         elif request in ['schedule', 'расписание']:
             self.last_event = 'rasp'
