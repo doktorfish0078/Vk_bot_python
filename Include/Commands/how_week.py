@@ -6,5 +6,5 @@ def how_week():
 
     week_num = date(now.year, now.month, now.day).isocalendar()[1]
     if week_num%2 == 0:
-        return '⤊↾⇯⇈⟰⥠⥜ Неделя над чертой ⇑↑⇡⬆︎⥘⇫⤒⇞'
-    return '⇩⥝⥙↯⇊⤋ Неделя под чертой ↧⥡⇃↓⥡⤈'
+        return '⏫⬆️ Неделя над чертой ⬆️⏫'
+    return '⏬⬇️ Неделя под чертой ⬇️⏬'
