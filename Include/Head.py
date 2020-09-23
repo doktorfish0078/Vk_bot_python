@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from Commands import weather, schedule, skirmish, myanimelist, \
     how_week, list_commands, diceroll, greet, thanks_react, special, \
-    test_films, choose\
+    test_films, choose \
     # , schedule_bus
 
     # test_wiki, \
