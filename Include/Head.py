@@ -193,7 +193,7 @@ class User:
                         pass
 
         if request in ['choose', 'выбрать', 'выбери']:
-            answer = choose.choose(msg['text'].split(request)[1])
+            answer = choose.choose(msg['text'].lower().split(request))
 
         if request in ['ban', 'бан', "blacklist"]:
             if self.id in gods:
