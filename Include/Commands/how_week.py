@@ -11,6 +11,3 @@ def how_week():
     if week_num%2 == 0:
         return '⏫⬆️ Неделя над чертой ⬆️⏫'
     return '⏬⬇️ Неделя под чертой ⬇️⏬'
-
-def time_out():
-    return datetime.now()
