@@ -1,8 +1,8 @@
-from datetime import date, datetime, timedelta
-
+from Head import current_datetime
+from datetime import date
 
 def how_week():
-    now = datetime.now() + timedelta(hours=4)
+    now = current_datetime()
 
     print(now)
 

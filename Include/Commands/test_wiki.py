@@ -21,6 +21,3 @@ def wiki_searching(text_msg):
         except BaseException:
             return "Страница не найдена"
 
-
-
-
