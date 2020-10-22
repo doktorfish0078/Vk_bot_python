@@ -101,10 +101,12 @@ class User:
 
             elif request in ['anime', 'аниме']:
                 self.last_event = 'a'
-                answer = myanimelist.get_top()
-                """
-                    Пока оставил без входящих атрибутов, непонятно как работать должно просто))
-                """
+                if len(words_from_msg) > 1 and words_from_msg[1].lower() in ['топ', "top", "лучшие", "best"]:
+                    answer = myanimelist.get_top()
+
+                else:
+                    answer = myanimelist.get_all()
+
 
             elif request in ['cinema', 'film', 'films', 'кино']:
                 answer = test_films.get_films()
