@@ -1,26 +1,25 @@
 import requests
-import bs4
+import random
+from bs4 import BeautifulSoup
 
 
-def get_top(count: int=5, by: str="") -> dict:
-    types = ["", "airing", "upcoming", "tv", "movie", "ova", "special", "bypopularity", "favorite"]
-    if by not in types:
-        return {"error: ": "Неизвестный тип!"}
-    html = requests.get("https://myanimelist.net/topanime.php?type={0}".format(by))
-    soup = bs4.BeautifulSoup(html.text, "html.parser")
+def get_top():
+    anime = []
+    url = 'https://you-anime.ru/top-anime'
+    try:
+        html_text = requests.get(url)
+        soup = BeautifulSoup(html_text.text, features="html.parser")
+        items = soup.find_all('div', {'class', 'item'})
 
-    top = {}
+        rand_nmbs = [random.randint(0, len(items)), random.randint(0, len(items)),
+                     random.randint(0, len(items))]
 
-    for anime in soup.select(".ranking-list", limit=count):
+        for i in rand_nmbs:
+            name = items[i].find('a', {'class', 'name'})
+            href = url + items[i].find('a')['href']
 
-        url = anime.select(".hoverinfo_trigger")[0]['href']
-        anime = anime.select(".hoverinfo_trigger")[0].findAll("img")[0]
-        name = anime['alt'].split(":")[1].strip(" ")
-        top[name] = url
+            anime.append("Аниме: {}, Ссылка: {}".format(name.text, href))
 
-    res = ""
-    for anime in top:
-        res += anime + " : " + top[anime] + "\n"
-    return res
-
-
+        return "\n".join(anime)
+    except BaseException:
+        return "Не удалось получить анимешечки :("
