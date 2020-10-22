@@ -120,10 +120,6 @@ class User:
                 self.last_event = 'q'
                 answer = how_week.how_week()
 
-            elif (request in ['время', 'дата', 'time', 'date']) or \
-                    ('сверим' in words_from_msg) and ('часы' in words_from_msg) :
-                answer = current_datetime()
-
             elif request in ['schedule', 'расписание']:
                 self.last_event = 'rasp'
                 attachment = schedule.schedule(self.current_chat)
@@ -206,6 +202,11 @@ class User:
 
             if request in ['choose', 'выбрать', 'выбери']:
                 answer = choose.choose(msg['text'].lower().split(request))
+
+            if (request in ['время', 'дата', 'time', 'date']) or \
+                    ('сверим' in words_from_msg) and ('часы' in words_from_msg) :
+                if self.id in gods:
+                    answer = current_datetime()
 
             if request in ['break_bot']:
                 if self.id in gods:
