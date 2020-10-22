@@ -9,6 +9,7 @@ from Commands import weather, schedule, skirmish, myanimelist, \
 from vk_api import VkApi
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
 
+from datetime import datetime, timedelta
 import parse_comands, send_msg
 import post_request_to_VK
 from common_finder import find_common
@@ -21,6 +22,10 @@ from time import time
 
 token = '3390b47bcb8faa9ba278d163df8c7b8b456275c52931cffaf4d1993733575f379e2d3fc56a38db8ef7624'
 group_id = '198707501'
+
+
+def current_datetime():
+    return datetime.now() + timedelta(hours=4)
 
 gods = []
 banned = {}
@@ -39,6 +44,9 @@ users = {}
 
 
 class User:
+
+    def is_batos(self):
+        return self.id == 135224919
 
     def __init__(self, sender_id):
         self.greeted = 0
@@ -67,7 +75,7 @@ class User:
         if message == '/?':
             message += 'status'
 
-        if message[0] == '/' or not self.slash_needed:
+        if message[0] == '/' or not self.slash_needed or self.is_batos():
             is_command = True
             uncut = split(r"[^\-\w]+", message)
             message = [word for word in uncut if len(word) > 0]
@@ -111,6 +119,10 @@ class User:
             elif request in ['неделя', 'week']:
                 self.last_event = 'q'
                 answer = how_week.how_week()
+
+            elif (request in ['время', 'дата', 'time', 'date']) or \
+                    ('сверим' in words_from_msg) and ('часы' in words_from_msg) :
+                answer = current_datetime()
 
             elif request in ['schedule', 'расписание']:
                 self.last_event = 'rasp'
