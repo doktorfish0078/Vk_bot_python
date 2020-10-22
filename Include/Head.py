@@ -199,6 +199,10 @@ class User:
                 if self.id in gods:
                     exit()
 
+            if request in ['check_true_date']:
+                if self.id in gods:
+                    answer = how_week.time_out()
+
             if request in ['ban', 'бан', "blacklist"]:
                 if self.id in gods:
                     try:
