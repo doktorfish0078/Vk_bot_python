@@ -16,10 +16,12 @@ def get_top():
 
         for i in rand_nmbs:
             name = items[i].find('a', {'class', 'name'})
-            href = url + items[i].find('a')['href']
+            href = "https://you-anime.ru/" + items[i].find('a')['href']
 
             anime.append("Аниме: {}, Ссылка: {}".format(name.text, href))
 
         return "\n".join(anime)
     except BaseException:
         return "Не удалось получить анимешечки :("
+
+print(get_top())
