@@ -82,14 +82,14 @@ class User:
 
             if len(message) == 0:
                 return None
-        else:
-            return None
-
-        print(message)
 
         if is_command:
             if (self.banned + self.banned_for <= time()):
                 self.parse(message, msg)
+
+        if ('спасибо' in message) and self.last_event:
+            if self.last_use and self.last_use >= time()-300:
+                send_msg.send_msg_tochat(vk_session, self.current_chat, thanks_react.react(vk_session, self.id, self.last_event, self.last_result))
 
     def parse(self, words_from_msg, msg):
         request = words_from_msg[0]
@@ -108,7 +108,8 @@ class User:
                     answer = myanimelist.get_all()
 
 
-            elif request in ['cinema', 'film', 'films', 'кино']:
+            elif request in ['cinema', 'film', 'films', 'кино', "фильм", "фильмы"]:
+                self.last_event = 'cin'
                 answer = test_films.get_films()
 
             elif request in ['weather', 'погода']:
@@ -139,7 +140,9 @@ class User:
                 try:
                     answer, self.last_result = diceroll.roll(vk_session, self.id, int(words_from_msg[1]), int(words_from_msg[2]))
                 except BaseException:
-                    answer, self.last_result = diceroll.roll(vk_session, self.id,)
+                    answer, self.last_result = diceroll.roll(vk_session, self.id)
+                finally:
+                    self.last_event = 'r'
 
             # elif request in ['вики', 'wiki', 'wikipedia']:
             #     if len(message) > 1:
@@ -175,10 +178,11 @@ class User:
                     try:
                         second_warrior = int(words_from_msg[1].split('|')[0][2:])
                         answer, self.last_result = skirmish.skirmish(vk_session, self.id, second_warrior)
+                        self.last_event = 's'
                     except BaseException:
                         answer = ''
                 else:
-                    answer = 'А по кому стрелять то? По воробьям? Победили воробьи'
+                    answer = 'А по кому стрелять то? По воробьям?'
 
             elif request in ['slash']:
                 self.slash_needed = not self.slash_needed
@@ -245,7 +249,7 @@ class User:
                 send_msg.send_msg_tochat(vk_session, self.current_chat, answer)
 
         except BaseException as error:
-            send_msg.send_msg_tochat(vk_session, 1, 'An Error occurred! {}'.format(error))
+            send_msg.send_msg_tochat(vk_session, 1, 'An Error occurred! {} \n msg={}'.format(error, msg))
 
 
 def main():

@@ -38,7 +38,8 @@ def weather(tomorrow = False):
             result_weather[0] += "{0} {1}, {2}{3}, ощущается как {4}\n".format(
                 time_day[day], temp[day].text, weather_condition[day].text,
                 weather_type[weather_condition[day].text], temp_feels_like[day].text)
-        return result_weather
+        return (result_weather, weather_condition["Днём"].text)
+
     except BaseException:
         print("Error weather")
-        return "Не удалось получить погоду :("
+        return ("Не удалось получить погоду :(", "Err")

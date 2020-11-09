@@ -1,7 +1,3 @@
-a = ''
+a = None
 
-
-try:
-    print(a + 10)
-except TypeError as a:
-    print(a)
+print(10 if a > 10 else "sdlgkj")
