@@ -15,37 +15,47 @@ weather_type = {
 }
 
 
-def weather(tomorrow=False):
+def weather(tomorrow=False, week=False):
     time_day = ['Утром', 'Днём', 'Вечером', 'Ночью']
-    numb_card_for_parsing = 0
+    numb_card_for_parsing = [0]
     day = 'сегодня'
+
     if tomorrow:
-        numb_card_for_parsing = 2
+        numb_card_for_parsing = [2]
         day = 'завтра'
+
+    if week:
+        numb_card_for_parsing = [0, 2, 3, 4, 5, 6, 7, 8]
+        day = 'неделю'
+
     try:
         html_text = requests.get('https://yandex.ru/pogoda/izhevsk/details?via=ms').text
         soup = BeautifulSoup(html_text, features="html.parser")
-        weather = soup.find_all('div', {'class', 'card'})
+        weather_soup = soup.find_all('div', {'class', 'card'})
 
-        weather_condition = weather[numb_card_for_parsing].find_all('td', {'class',
-                                                                           'weather-table__body-cell weather-table__body-cell_type_condition'})
+        result_weather = ['Погода на {}:\n'.format(day), '']
 
-        temp = weather[numb_card_for_parsing].find_all('div', {'class', 'weather-table__temp'})
+        for card in numb_card_for_parsing:
 
-        temp_feels_like = weather[numb_card_for_parsing].find_all('td', {'class',
-                                                                         'weather-table__body-cell weather-table__body-cell_type_feels-like'})
+            weather_condition = weather_soup[card].find_all('td', {'class', 'weather-table__body-cell weather-table__body-cell_type_condition'})
 
-        result_weather = ['Погода на {}:\n'.format(day), weather_condition[2].text]
+            temp = weather_soup[card].find_all('div', {'class', 'weather-table__temp'})
 
-        for day in range(len(time_day)):
-            result_weather[0] += "{0} {1}, {2}{3}, ощущается как {4}\n".format(
-                time_day[day], temp[day].text, weather_condition[day].text,
-                weather_type[weather_condition[day].text], temp_feels_like[day].text)
+            temp_feels_like = weather_soup[card].find_all('td', {'class', 'weather-table__body-cell weather-table__body-cell_type_feels-like'})
+
+            date = '{} {}\n'.format(
+                weather_soup[card].find('strong', {'class', 'forecast-details__day-number'}).text,
+                weather_soup[card].find('span', {'class', 'forecast-details__day-month'}).text)
+
+            result_weather[0] += date
+            result_weather[1] = weather_condition[2].text
+            for day in range(len(time_day)):
+                result_weather[0] += "{0} {1}, {2}{3}, ощущается как {4}\n".format(
+                    time_day[day], temp[day].text, weather_condition[day].text,
+                    weather_type[weather_condition[day].text], temp_feels_like[day].text)
+            result_weather[0] += '\n'
         return result_weather
 
     except BaseException:
         print("Error weather")
         return ("Не удалось получить погоду :(", "Err")
-
-
-print(weather())
