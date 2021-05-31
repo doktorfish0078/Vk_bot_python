@@ -2,9 +2,6 @@
 from Commands import weather, schedule, skirmish, myanimelist, \
     how_week, list_commands, diceroll, greet, thanks_react, special, \
     test_films, choose \
-    # , schedule_bus
-
-    # test_wiki, \
 
 from vk_api import VkApi
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
